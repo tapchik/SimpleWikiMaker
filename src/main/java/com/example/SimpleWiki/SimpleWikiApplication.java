@@ -8,6 +8,7 @@ public class SimpleWikiApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(SimpleWikiApplication.class, args);
+		System.out.println("Hello World");
 	}
 
 }
