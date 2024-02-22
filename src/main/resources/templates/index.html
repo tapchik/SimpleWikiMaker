@@ -1,9 +1,30 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Home Page</title>
+    <meta charset="utf-8" />
+    <title>MDToHtml</title>
+    <link th:href="@{/css/index.css}" rel="stylesheet" />
 </head>
 <body>
-    <h1>Welcome to the Home Page</h1>
+    <h1>MDToHtml</h1>
+    <input type="file" id="fileBrowse" multiple />
+    <table>
+        <tr>
+            <td>
+                <div id="fileItemBlock"></div>
+            </td>
+            <td>
+                <button id="convertButton">==></button>
+            </td>
+            <td>
+                <div>
+                    <h3>Result</h3>
+                    <textarea class="text"></textarea>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <script th:src="@{/js/readFromFile.js}" type="text/javascript"> </script>
+    <script th:src="@{js/convertToHtml.js}" type="text/javascript"></script>
 </body>
 </html>

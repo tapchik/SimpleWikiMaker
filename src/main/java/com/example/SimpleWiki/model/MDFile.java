@@ -27,13 +27,8 @@ public class MDFile {
         
     }
 
-    public void FindHeadings(String paragraph)
-    {
-        Pattern pattern = Pattern.compile("^\\#+");
-    }
-
     public void FindCodeBlocks()
     {
-        
+        Pattern ptrn = Pattern.compile("");
     }
 }
