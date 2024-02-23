@@ -1,4 +1,12 @@
-var btn = document.getElementById("convertButton").onclick = sendTextToHtml;
-function sendTextToHtml() {
-    console.log('1');
-}
+$('body').on('click', '#convertButton', function() {
+    var textBefore = $("#textBefore").val().replace("\n", "\n");
+    var api_path = "/button";
+    $.ajax({
+        type: "POST",
+        url: api_path,
+        data: {text: textBefore},
+        success:function(result) {
+            $("#textAfter").val(result);
+        },
+    });
+});

@@ -4,27 +4,38 @@
     <meta charset="utf-8" />
     <title>MDToHtml</title>
     <link th:href="@{/css/index.css}" rel="stylesheet" />
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
-    <h1>MDToHtml</h1>
-    <input type="file" id="fileBrowse" multiple />
+    <div class="textDivs">
+        <h1>MDToHtml</h1>
+        <input type="file" id="fileBrowse" multiple />
+    </div>
     <table>
         <tr>
             <td>
-                <div id="fileItemBlock"></div>
+                <div class="textDivs">
+                    <h3>Text in MD</h3>
+                    <textarea id="textBefore"></textarea>
+                </div>
             </td>
             <td>
                 <button id="convertButton">==></button>
             </td>
             <td>
-                <div>
-                    <h3>Result</h3>
-                    <textarea class="text"></textarea>
+                <div class="textDivs">
+                    <h3>Result in HTML</h3>
+                    <textarea id="textAfter"></textarea>
                 </div>
             </td>
         </tr>
     </table>
     <script th:src="@{/js/readFromFile.js}" type="text/javascript"> </script>
-    <script th:src="@{js/convertToHtml.js}" type="text/javascript"></script>
+    <script th:src="@{/js/convertToHtml.js}" type="text/javascript"></script>
 </body>
 </html>

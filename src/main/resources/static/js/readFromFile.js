@@ -1,25 +1,10 @@
-const fileItemBlock = document.getElementById("fileItemBlock");
-// создаем элемент, который представляет отдельный файл на странице
-function createFileItem(file){
-    const fileItem = document.createElement("div");
-    fileItem.className = "fileItem";
-
-    // создаем заголовок для добавляемого файла 
-    const fileHeader = document.createElement("h3");
-    fileHeader.textContent = file.name;
-    fileItem.appendChild(fileHeader);
-    return fileItem;
-}
 function readTextFile(file){
     return function(e){
-        const fileItem = createFileItem(file);
         // создаем элемент div для вывода текста файла
-        const textarea = document.createElement("textarea");   
+        const textarea = document.getElementById("textBefore");   
         // переносы строки заменяем на соответствующий текст
         textarea.textContent = e.target.result.replace("\n", "\n");
-        textarea.className = "text";       
-        fileItem.appendChild(textarea); 
-        fileItemBlock.appendChild(fileItem);  
+        textarea.className = "text"; 
     };
 }
 function printFiles(e) {  

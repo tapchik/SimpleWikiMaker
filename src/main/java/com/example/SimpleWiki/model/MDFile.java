@@ -3,20 +3,21 @@ import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
 public class MDFile {
-    String text;
+    public String text;
     
     public MDFile(String text)
     {
         this.text = text;
     }
 
-    public void ConvertToHtml(String text)
+    public String ConvertToHtml(String text)
     {
-        String result = "";
+        String result = "OK";
         String [] paragraphs = text.split("\n");
         for (String paragraph : paragraphs) {
             
         }
+        return "Read Success";
     }
 
     public void AddDefaultHtml(String result)
