@@ -15,7 +15,7 @@ public class MDFile {
     public MDFile(String text) { 
         this.text = text;
         //this.path = path;
-        this.tagsOpen = TagsOpenFill(tagsOpen);
+        this.tagsOpen = TagsOpenFill(tagsOpen); 
         this.multiLine = "";
         this.result = "";
     }
@@ -23,16 +23,15 @@ public class MDFile {
     public HashMap<String, Boolean> TagsOpenFill(HashMap<String, Boolean> tagsOpen) {
         tagsOpen = new HashMap<String, Boolean>();
         tagsOpen.put("```", false);
+        tagsOpen.put("h", false);
         return tagsOpen;
     }
 
     public String ConvertToHtml(String text) {
-
-        String result = "";
         for (String line: text.split("\n"))
         {
             line = FindCodeBlock(line);
-            if (!tagsOpen.get("```"))
+            if (!tagsOpen.get("```") && line != "</code></pre>")
             {
                 line = FindEmptyString(line);
                 line = FindCodeInline(line);
@@ -40,14 +39,49 @@ public class MDFile {
                 line = FindItalic(line);
                 line = FindStrikethrough(line);
                 line = FindHighlighted(line);
-                multiLine = multiLine + line;
+                line = FindHeading(line);
+                if (tagsOpen.get("h"))
+                {
+                    MultiLineCheck();
+                    result = result + line + "\n";
+                    tagsOpen.put("h", false);
+                }
+                else
+                {
+                    multiLine = multiLine + line + "\n";
+                }
             }
             else
             {
-                result = result + line;
+                result = result + line + "\n";
             }
         }
+        MultiLineCheck();
         return result + multiLine;
+    }
+
+    private String FindEmptyString(String line) {
+        if (line == "")
+        {
+            MultiLineCheck();
+            result = result + "\n";
+            return line;
+        }
+        return line;
+    }
+
+    public void MultiLineCheck() {
+        if (multiLine.trim() != "")
+        {
+            multiLine = FindCodeInline(multiLine);
+            multiLine = FindBold(multiLine);
+            multiLine = FindItalic(multiLine);
+            multiLine = FindStrikethrough(multiLine);
+            multiLine = FindHighlighted(multiLine);
+            multiLine = "<p>" + multiLine.trim() + "</p>" + "\n";
+            result = result + multiLine;
+            multiLine = "";
+        }
     }
 
     private String FindHighlighted(String line) {
@@ -98,6 +132,17 @@ public class MDFile {
         return line;
     }
 
+    private String FindCodeInline(String line) {
+        String regex = "`([^`]+)`";
+        Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
+        Matcher matcher = pattern.matcher(line);
+        if (matcher.find())
+        { 
+            line = matcher.replaceAll(match -> "<code>" + match.group(1) + "</code>");
+        }
+        return line;
+    }
+
     public String FindCodeBlock(String line) {
         String regex = !tagsOpen.get("```") ? "^```([^`]*)$" : "^```$";
         Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
@@ -106,8 +151,9 @@ public class MDFile {
         {
             if (!tagsOpen.get("```"))
             {
-                String replace = "<pre><code>\n";
+                String replace = "<pre><code>";
                 tagsOpen.put("```", true);
+                MultiLineCheck();
                 return replace;
             }
             else
@@ -123,21 +169,14 @@ public class MDFile {
         } 
     }
 
-    private String FindCodeInline(String line) {
-        String regex = "`([^`]+)`";
+    public String FindHeading(String line) {
+        String regex = "^#{1,6} (.+)";
         Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
         Matcher matcher = pattern.matcher(line);
         if (matcher.find())
         { 
-            line = matcher.replaceAll(match -> "<code>" + match.group(1) + "</code>");
-        }
-        return line;
-    }
-
-    private String FindEmptyString(String line) {
-        if (line == "")
-        {
-            
+            line = matcher.replaceAll(match -> "<h" + match.group(0).split(" ")[0].length() + ">" + match.group(1) + "</h" + match.group(0).split(" ")[0].length() + ">");
+            tagsOpen.put("h", true);
         }
         return line;
     }
