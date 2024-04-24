@@ -6,15 +6,26 @@ import java.util.regex.Pattern;
 //Class for MDFile with atributes text and path (in the future for links)
 public class MDFile {
 
+    public String name;
     public String text;
-    //public String path; //for path and connections
-    public HashMap<String, Boolean> tagsOpen;
+    public String path;
+    
+    public HashMap<String, Boolean> tagsOpen; 
     public String multiLine;
     public String result;
     
-    public MDFile(String text) { 
+    public MDFile(String text, String path) {
         this.text = text;
-        //this.path = path;
+        this.path = path;
+        this.tagsOpen = TagsOpenFill(tagsOpen); 
+        this.multiLine = "";
+        this.result = "";
+    }
+    
+    public MDFile(String name, String text, String path) {
+        this.name = name;
+        this.text = text;
+        this.path = path;
         this.tagsOpen = TagsOpenFill(tagsOpen); 
         this.multiLine = "";
         this.result = "";
@@ -40,6 +51,7 @@ public class MDFile {
                 line = FindStrikethrough(line);
                 line = FindHighlighted(line);
                 line = FindHeading(line);
+                //line = FindInternalLinks(line);
                 if (tagsOpen.get("h"))
                 {
                     MultiLineCheck();
@@ -54,17 +66,25 @@ public class MDFile {
             else
             {
                 result = result + line + "\n";
-            }
+            } 
         }
         MultiLineCheck();
-        return result + multiLine;
+        return result;
+    }
+
+    private String FindInternalLinks(String line) {
+        String regex = "~~([^~]+)~~";
+        Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
+        Matcher matcher = pattern.matcher(line);
+        String lineCopy = line;
+        line = matcher.replaceAll(match -> lineCopy.matches("<code>(.*)" + Pattern.quote(match.group(0)) + "(.*)</code>") ? match.group(0) : "<s>" + match.group(1) + "</s>");
+        return line;
     }
 
     private String FindEmptyString(String line) {
         if (line == "")
         {
             MultiLineCheck();
-            result = result + "\n";
             return line;
         }
         return line;
@@ -89,10 +109,7 @@ public class MDFile {
         Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
         Matcher matcher = pattern.matcher(line);
         String lineCopy = line;
-        if (matcher.find())
-        {
-            line = matcher.replaceAll(match -> lineCopy.matches("<code>(.*)" + Pattern.quote(match.group(0)) + "(.*)</code>") ? match.group(0) : "<span>" + match.group(1) + "</span>");
-        }
+        line = matcher.replaceAll(match -> lineCopy.matches("<code>(.*)" + Pattern.quote(match.group(0)) + "(.*)</code>") ? match.group(0) : "<span>" + match.group(1) + "</span>");
         return line;
     }
 
@@ -101,10 +118,7 @@ public class MDFile {
         Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
         Matcher matcher = pattern.matcher(line);
         String lineCopy = line;
-        if (matcher.find())
-        {
-            line = matcher.replaceAll(match -> lineCopy.matches("<code>(.*)" + Pattern.quote(match.group(0)) + "(.*)</code>") ? match.group(0) : "<s>" + match.group(1) + "</s>");
-        }
+        line = matcher.replaceAll(match -> lineCopy.matches("<code>(.*)" + Pattern.quote(match.group(0)) + "(.*)</code>") ? match.group(0) : "<s>" + match.group(1) + "</s>");
         return line;
     }
 
@@ -113,10 +127,7 @@ public class MDFile {
         Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
         Matcher matcher = pattern.matcher(line);
         String lineCopy = line;
-        if (matcher.find())
-        {
-            line = matcher.replaceAll(match -> lineCopy.matches("<code>(.*)" + Pattern.quote(match.group(0)) + "(.*)</code>") ? match.group(0) : "<em>" + match.group(1) + "</em>");
-        }
+        line = matcher.replaceAll(match -> lineCopy.matches("<code>(.*)" + Pattern.quote(match.group(0)) + "(.*)</code>") ? match.group(0) : "<em>" + match.group(1) + "</em>");
         return line;
     }
 
@@ -125,10 +136,7 @@ public class MDFile {
         Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
         Matcher matcher = pattern.matcher(line);
         String lineCopy = line;
-        if (matcher.find())
-        {
-            line = matcher.replaceAll(match -> lineCopy.matches("<code>(.*)" + Pattern.quote(match.group(0)) + "(.*)</code>") ? match.group(0) : "<b>" + match.group(1) + "</b>");
-        }
+        line = matcher.replaceAll(match -> lineCopy.matches("<code>(.*)" + Pattern.quote(match.group(0)) + "(.*)</code>") ? match.group(0) : "<b>" + match.group(1) + "</b>");
         return line;
     }
 
@@ -136,10 +144,7 @@ public class MDFile {
         String regex = "`([^`]+)`";
         Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
         Matcher matcher = pattern.matcher(line);
-        if (matcher.find())
-        { 
-            line = matcher.replaceAll(match -> "<code>" + match.group(1) + "</code>");
-        }
+        line = matcher.replaceAll(match -> "<code>" + match.group(1) + "</code>");
         return line;
     }
 
@@ -179,13 +184,5 @@ public class MDFile {
             tagsOpen.put("h", true);
         }
         return line;
-    }
-
-    public String AddDefaultTagsStart() {
-        return "";
-    }
-
-    public String AddDefaultTagsEnd() {
-        return "";
     }
 }

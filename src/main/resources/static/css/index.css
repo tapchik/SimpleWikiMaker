@@ -1,8 +1,29 @@
 .textDivs 
-{width: 650px; margin:0 10px;}
+{width: 600px; height: 300px; max-height: 300px; margin: 0 10px; display: inline-block; position: relative;}
 
-#textBefore
-{min-height: 80px; width: 650px; height: 500px; border:1px solid #ccc;padding:10px;}
+.fileManagerDiv
+{width: 600px; height: 300px; max-height: 300px; margin: 0 10px; display: inline-block; position: relative;}
 
-#textAfter
-{min-height: 80px; width: 650px; height: 500px; border:1px solid #ccc;padding:10px;}
+.files
+{width: 600px; height: 250px; border: 1px solid black; overflow: auto; padding-left: 10px; padding-top: 10px;}
+
+textarea
+{width: 100%; height: 100%; resize: none;}
+
+#html, #convertButton
+{position: absolute; right: 0; margin: 5px}
+
+#mdBtnContainer
+{position: absolute; right: 0; margin: 5px;}
+
+#mdFileButton, #mdDirButton, #htmlFileButton, #htmlDirButton
+{background:none; border:none; }
+
+#mdFileButton:hover, #mdDirButton:hover, #htmlFileButton:hover, #htmlDirButton:hover
+{color: #0000FF; }
+
+svg 
+{ width: 24px; height: 24px; }
+
+.item
+{ display: grid; align-items: center; justify-items: start; grid-template-columns: 32px auto; padding: 4px;}

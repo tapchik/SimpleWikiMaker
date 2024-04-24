@@ -1,0 +1,4 @@
+<button th:hidden="${showHtmlBackButton}" id="htmlBackButton" type="button">Back</button>
+<div th:each="currentHtmlFile : ${currentHtmlFiles}">
+    <div th:insert="~{fragments/file.html :: file(${currentHtmlFile.GetName()}, ${currentHtmlFile.GetType()}, ${'html'})}"> </div>
+</div>

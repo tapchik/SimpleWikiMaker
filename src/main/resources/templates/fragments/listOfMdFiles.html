@@ -1,0 +1,4 @@
+<button th:hidden="${showMdBackButton}" id="mdBackButton" type="button">Back</button>
+<div th:each="currentMdFile : ${currentMdFiles}">
+    <div th:insert="~{fragments/file.html :: file(${currentMdFile.GetName()}, ${currentMdFile.GetType()}, ${'markdown'})}"> </div>
+</div>
