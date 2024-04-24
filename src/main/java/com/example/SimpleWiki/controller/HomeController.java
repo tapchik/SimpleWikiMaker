@@ -4,17 +4,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.AntPathMatcher;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.HandlerMapping;
 
 import com.example.SimpleWiki.model.MDFile;
 import com.example.SimpleWiki.model.File;
 import com.example.SimpleWiki.repository.HTMLFileRepository;
 import com.example.SimpleWiki.repository.MDFileRepository;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 public class HomeController {
@@ -33,11 +40,32 @@ public class HomeController {
     public String index() {
         return "index";
     }
+    @RequestMapping("/newPage")
+    public String newPage(Model model) {
+        model.addAttribute("currentHtmlFiles", htmlRepository.fileRepository.GetCurrentFiles());
+        model.addAttribute("showHtmlBackButton", false);
+        return "newPage";
+    }
+    @RequestMapping(produces = MediaType.TEXT_HTML_VALUE, value = "/htmlPage/{path}/**")
+    @ResponseBody
+    public String newHtmlPage(@PathVariable("path") String path, HttpServletRequest request) {
+        String restOfTheUrl = new AntPathMatcher().extractPathWithinPattern(request.getAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE).toString(),request.getRequestURI());
+        System.out.println(path + "/" + restOfTheUrl);
+        String textTags = htmlRepository.FindByPath(path + "/" + restOfTheUrl);
+        if (textTags == null)
+        {
+            return "<html>\n" + "<header><title>Welcome</title></header>\n" +
+          "<body>\n" + "File doesnt exist" + "\n" + "</body>\n" + "</html>";
+        }
+        return "<html>\n" + "<header><title>Welcome</title></header>\n" +
+          "<body>\n" + textTags + "\n" + "</body>\n" + "</html>";
+    }
+
     @RequestMapping("/convertButtonClick")
     @ResponseBody
     public String ConvertBtnClick(@RequestParam(value = "text") String text) {
         MDFile mdFile = new MDFile(text, "");
-        return mdFile.ConvertToHtml(mdFile.text);
+        return mdFile.ConvertToHtml();
     }
 
     @RequestMapping("/mdDirButtonClick")
@@ -111,6 +139,7 @@ public class HomeController {
     @RequestMapping("/convertRepoToHtml")
     public String ConvertMdFilesToHtml(Model model) {
         htmlRepository.fileRepository.SetClearRepository();
+        complexFiles = new HashMap<File,File>();
         htmlRepository.fileRepository.SetByRepository(mdRepository.fileRepository, htmlRepository, complexFiles);
         model.addAttribute("showHtmlBackButton", true);
         model.addAttribute("currentHtmlFiles", htmlRepository.fileRepository.GetCurrentFiles());

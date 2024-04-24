@@ -24,4 +24,21 @@ public class HTMLFileRepository {
     public void AddHtmlFile(String newName, String newText, String newPath) {
         this.listHtmlFiles.add(new HTMLFile(newName, newText, newPath));
     }
+
+    public void AddHtmlFile(HTMLFile file)
+    {
+        this.listHtmlFiles.add(file);
+    }
+
+    public String FindByPath(String path) {
+        for (HTMLFile htmlFile: this.listHtmlFiles)
+        {
+            System.out.println(htmlFile.GetPath());
+            if (htmlFile.GetPath().equals(path))
+            {
+                return htmlFile.GetText();
+            }
+        }
+        return null;
+    }
 }

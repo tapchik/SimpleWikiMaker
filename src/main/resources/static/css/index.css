@@ -13,7 +13,7 @@ textarea
 #html, #convertButton
 {position: absolute; right: 0; margin: 5px}
 
-#mdBtnContainer
+#mdBtnContainer, #openOnNewPage
 {position: absolute; right: 0; margin: 5px;}
 
 #mdFileButton, #mdDirButton, #htmlFileButton, #htmlDirButton

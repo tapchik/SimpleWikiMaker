@@ -26,4 +26,8 @@ public class HTMLFile {
     public String AddDefaultTagsEnd() {
         return "";
     }
+
+    public void AddTextTags(String text) {
+        this.textTags += "\n" + text;
+    }
 }

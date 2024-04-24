@@ -88,18 +88,6 @@ public class FileRepository {
         this.SetCurrentFiles();
     }
 
-    public List<MDFile> GetMdFiles() {
-        List<MDFile> listMd = new ArrayList<MDFile>() {};
-        for (File file: this.allFiles)
-        {
-            if (file.GetType().equals("file"))
-            {
-                listMd.add(new MDFile(file.GetName(), file.GetText(),file.GetPath()));
-            }
-        }
-        return listMd;
-    }
-
     public void SetByRepository(FileRepository mdRepository, HTMLFileRepository htmlFileRepository, Map<File, File> complexFiles) {
         for (File fileMd: mdRepository.GetAllFiles()) 
         {
@@ -120,8 +108,11 @@ public class FileRepository {
             }
             else if (entry.getKey().GetType().equals("file"))
             {
-                htmlFileRepository.AddHtmlFile(entry.getValue().GetName().split("\\.")[0] + ".html", "<h1>" + entry.getValue().GetName().split("\\.")[0] + "</h1>",entry.getValue().GetPath().split("\\.")[0] + ".html");
-                htmlFileRepository.fileRepository.AddFile(entry.getValue());
+                MDFile fileMd = entry.getKey().FileToMd();
+                HTMLFile fileHtml = entry.getValue().FileToHtml();
+                fileHtml.AddTextTags(fileMd.ConvertToHtml());
+                htmlFileRepository.AddHtmlFile(fileHtml);
+                htmlFileRepository.fileRepository.AddFile(new File(entry.getValue().GetName(), fileHtml.GetText(), entry.getValue().GetPath(), entry.getValue().GetType()));
             }
         }
         this.currentFolderPath = this.folderPath;

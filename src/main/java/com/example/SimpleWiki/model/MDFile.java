@@ -1,7 +1,9 @@
 package com.example.SimpleWiki.model;
-import java.util.HashMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
+import com.vladsch.flexmark.util.ast.Node;
+import com.vladsch.flexmark.html.HtmlRenderer;
+import com.vladsch.flexmark.parser.Parser;
+import com.vladsch.flexmark.util.data.MutableDataSet;
 
 //Class for MDFile with atributes text and path (in the future for links)
 public class MDFile {
@@ -10,179 +12,32 @@ public class MDFile {
     public String text;
     public String path;
     
-    public HashMap<String, Boolean> tagsOpen; 
-    public String multiLine;
-    public String result;
-    
     public MDFile(String text, String path) {
         this.text = text;
         this.path = path;
-        this.tagsOpen = TagsOpenFill(tagsOpen); 
-        this.multiLine = "";
-        this.result = "";
     }
     
     public MDFile(String name, String text, String path) {
         this.name = name;
         this.text = text;
         this.path = path;
-        this.tagsOpen = TagsOpenFill(tagsOpen); 
-        this.multiLine = "";
-        this.result = "";
     }
 
-    public HashMap<String, Boolean> TagsOpenFill(HashMap<String, Boolean> tagsOpen) {
-        tagsOpen = new HashMap<String, Boolean>();
-        tagsOpen.put("```", false);
-        tagsOpen.put("h", false);
-        return tagsOpen;
-    }
+    public String ConvertToHtml() {
+        MutableDataSet options = new MutableDataSet();
 
-    public String ConvertToHtml(String text) {
-        for (String line: text.split("\n"))
-        {
-            line = FindCodeBlock(line);
-            if (!tagsOpen.get("```") && line != "</code></pre>")
-            {
-                line = FindEmptyString(line);
-                line = FindCodeInline(line);
-                line = FindBold(line);
-                line = FindItalic(line);
-                line = FindStrikethrough(line);
-                line = FindHighlighted(line);
-                line = FindHeading(line);
-                //line = FindInternalLinks(line);
-                if (tagsOpen.get("h"))
-                {
-                    MultiLineCheck();
-                    result = result + line + "\n";
-                    tagsOpen.put("h", false);
-                }
-                else
-                {
-                    multiLine = multiLine + line + "\n";
-                }
-            }
-            else
-            {
-                result = result + line + "\n";
-            } 
-        }
-        MultiLineCheck();
-        return result;
-    }
+        // uncomment to set optional extensions
+        //options.set(Parser.EXTENSIONS, Arrays.asList(TablesExtension.create(), StrikethroughExtension.create()));
 
-    private String FindInternalLinks(String line) {
-        String regex = "~~([^~]+)~~";
-        Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
-        Matcher matcher = pattern.matcher(line);
-        String lineCopy = line;
-        line = matcher.replaceAll(match -> lineCopy.matches("<code>(.*)" + Pattern.quote(match.group(0)) + "(.*)</code>") ? match.group(0) : "<s>" + match.group(1) + "</s>");
-        return line;
-    }
+        // uncomment to convert soft-breaks to hard breaks
+        //options.set(HtmlRenderer.SOFT_BREAK, "<br />\n");
 
-    private String FindEmptyString(String line) {
-        if (line == "")
-        {
-            MultiLineCheck();
-            return line;
-        }
-        return line;
-    }
+        Parser parser = Parser.builder(options).build();
+        HtmlRenderer renderer = HtmlRenderer.builder(options).build();
 
-    public void MultiLineCheck() {
-        if (multiLine.trim() != "")
-        {
-            multiLine = FindCodeInline(multiLine);
-            multiLine = FindBold(multiLine);
-            multiLine = FindItalic(multiLine);
-            multiLine = FindStrikethrough(multiLine);
-            multiLine = FindHighlighted(multiLine);
-            multiLine = "<p>" + multiLine.trim() + "</p>" + "\n";
-            result = result + multiLine;
-            multiLine = "";
-        }
-    }
-
-    private String FindHighlighted(String line) {
-        String regex = "==([^=]+)==";
-        Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
-        Matcher matcher = pattern.matcher(line);
-        String lineCopy = line;
-        line = matcher.replaceAll(match -> lineCopy.matches("<code>(.*)" + Pattern.quote(match.group(0)) + "(.*)</code>") ? match.group(0) : "<span>" + match.group(1) + "</span>");
-        return line;
-    }
-
-    private String FindStrikethrough(String line) {
-        String regex = "~~([^~]+)~~";
-        Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
-        Matcher matcher = pattern.matcher(line);
-        String lineCopy = line;
-        line = matcher.replaceAll(match -> lineCopy.matches("<code>(.*)" + Pattern.quote(match.group(0)) + "(.*)</code>") ? match.group(0) : "<s>" + match.group(1) + "</s>");
-        return line;
-    }
-
-    private String FindItalic(String line) {
-        String regex = "\\*([^\\*]+)\\*";
-        Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
-        Matcher matcher = pattern.matcher(line);
-        String lineCopy = line;
-        line = matcher.replaceAll(match -> lineCopy.matches("<code>(.*)" + Pattern.quote(match.group(0)) + "(.*)</code>") ? match.group(0) : "<em>" + match.group(1) + "</em>");
-        return line;
-    }
-
-    private String FindBold(String line) {
-        String regex = "\\*\\*([^\\*]+)\\*\\*";
-        Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
-        Matcher matcher = pattern.matcher(line);
-        String lineCopy = line;
-        line = matcher.replaceAll(match -> lineCopy.matches("<code>(.*)" + Pattern.quote(match.group(0)) + "(.*)</code>") ? match.group(0) : "<b>" + match.group(1) + "</b>");
-        return line;
-    }
-
-    private String FindCodeInline(String line) {
-        String regex = "`([^`]+)`";
-        Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
-        Matcher matcher = pattern.matcher(line);
-        line = matcher.replaceAll(match -> "<code>" + match.group(1) + "</code>");
-        return line;
-    }
-
-    public String FindCodeBlock(String line) {
-        String regex = !tagsOpen.get("```") ? "^```([^`]*)$" : "^```$";
-        Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
-        Matcher matcher = pattern.matcher(line);
-        if (matcher.find())
-        {
-            if (!tagsOpen.get("```"))
-            {
-                String replace = "<pre><code>";
-                tagsOpen.put("```", true);
-                MultiLineCheck();
-                return replace;
-            }
-            else
-            {
-                String replace = "</code></pre>";
-                tagsOpen.put("```", false);
-                return replace;
-            }
-        }
-        else
-        {
-            return line; 
-        } 
-    }
-
-    public String FindHeading(String line) {
-        String regex = "^#{1,6} (.+)";
-        Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
-        Matcher matcher = pattern.matcher(line);
-        if (matcher.find())
-        { 
-            line = matcher.replaceAll(match -> "<h" + match.group(0).split(" ")[0].length() + ">" + match.group(1) + "</h" + match.group(0).split(" ")[0].length() + ">");
-            tagsOpen.put("h", true);
-        }
-        return line;
+        // You can re-use parser and renderer instances
+        Node document = parser.parse(this.text);
+        String htmlText = renderer.render(document);  // "<p>This is <em>Sparta</em></p>\n"
+        return htmlText;
     }
 }

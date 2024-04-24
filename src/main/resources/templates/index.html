@@ -26,6 +26,7 @@
         </div>
         <div class="fileManagerDiv">
             <h2>HTML Repository</h2>
+            <button id="openOnNewPage">open on new page</button>
             <div class="files">
                 <div th:insert="~{fragments/listOfHtmlFiles.html :: div}" id="htmlFilesFolder"></div>
             </div>
@@ -45,6 +46,7 @@
     <script th:src="@{/js/readFilesFromFolder.js}" type="text/javascript"> </script>
     <script th:src="@{/js/convertToHtml.js}" type="text/javascript"></script>
     <script th:src="@{/js/clickOnFile.js}" type="text/javascript"></script>
+    <script th:src="@{/js/openNewPage.js}" type="text/javascript"></script>
 </body>
 </html>
 

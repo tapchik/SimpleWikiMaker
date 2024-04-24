@@ -1,5 +1,7 @@
 package com.example.SimpleWiki.model;
 
+import javax.swing.text.html.HTML;
+
 public class File {
     private String name;
     private String text;
@@ -28,5 +30,15 @@ public class File {
         this.text = text;
         this.path = path;
         this.type = type;
+    }
+
+    public MDFile FileToMd()
+    {
+        return new MDFile(this.GetName(), this.GetText(), this.GetPath());
+    }
+
+    public HTMLFile FileToHtml()
+    {
+        return new HTMLFile(this.GetName(), this.GetText(), this.GetPath());
     }
 }
