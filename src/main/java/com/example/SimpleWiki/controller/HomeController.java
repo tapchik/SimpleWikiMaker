@@ -40,27 +40,7 @@ public class HomeController {
     public String index() {
         return "index";
     }
-    @RequestMapping("/newPage")
-    public String newPage(Model model) {
-        model.addAttribute("currentHtmlFiles", htmlRepository.fileRepository.GetCurrentFiles());
-        model.addAttribute("showHtmlBackButton", false);
-        return "newPage";
-    }
-    @RequestMapping(produces = MediaType.TEXT_HTML_VALUE, value = "/htmlPage/{path}/**")
-    @ResponseBody
-    public String newHtmlPage(@PathVariable("path") String path, HttpServletRequest request) {
-        String restOfTheUrl = new AntPathMatcher().extractPathWithinPattern(request.getAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE).toString(),request.getRequestURI());
-        System.out.println(path + "/" + restOfTheUrl);
-        String textTags = htmlRepository.FindByPath(path + "/" + restOfTheUrl);
-        if (textTags == null)
-        {
-            return "<html>\n" + "<header><title>Welcome</title></header>\n" +
-          "<body>\n" + "File doesnt exist" + "\n" + "</body>\n" + "</html>";
-        }
-        return "<html>\n" + "<header><title>Welcome</title></header>\n" +
-          "<body>\n" + textTags + "\n" + "</body>\n" + "</html>";
-    }
-
+    
     @RequestMapping("/convertButtonClick")
     @ResponseBody
     public String ConvertBtnClick(@RequestParam(value = "text") String text) {
@@ -104,9 +84,11 @@ public class HomeController {
     @ResponseBody
     public String SetCurrentFolder(@RequestParam(value = "dirHandle") String currentFolder)
     {
+        mdRepository = new MDFileRepository();
+        htmlRepository = new HTMLFileRepository();
         mdRepository.fileRepository.SetFolderPath(currentFolder);
         htmlRepository.fileRepository.SetFolderPath(currentFolder);
-        mdRepository.fileRepository.SetClearRepository();
+        complexFiles = new HashMap<File,File>();
         mdRepository.fileRepository.SetCurrentFolder(currentFolder);
         return "Current folder is set";
     }
@@ -138,11 +120,27 @@ public class HomeController {
 
     @RequestMapping("/convertRepoToHtml")
     public String ConvertMdFilesToHtml(Model model) {
-        htmlRepository.fileRepository.SetClearRepository();
         complexFiles = new HashMap<File,File>();
         htmlRepository.fileRepository.SetByRepository(mdRepository.fileRepository, htmlRepository, complexFiles);
+        htmlRepository.AddLinksToFiles();
         model.addAttribute("showHtmlBackButton", true);
         model.addAttribute("currentHtmlFiles", htmlRepository.fileRepository.GetCurrentFiles());
         return "fragments/listOfHtmlFiles";
     }
+
+    @RequestMapping(produces = MediaType.TEXT_HTML_VALUE, value = "/p/**")
+    @ResponseBody
+    public String newHtmlPage(HttpServletRequest request) {
+        String restOfTheUrl = new AntPathMatcher().extractPathWithinPattern(request.getAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE).toString(),request.getRequestURI());
+        //System.out.println(restOfTheUrl);
+        String textTags = htmlRepository.FindByPath(restOfTheUrl+".html");
+        if (textTags == null)
+        {
+            return "<html>\n" + "<header><title>Welcome</title></header>\n" +
+          "<body>\n" + "File doesnt exist" + "\n" + "</body>\n" + "</html>";
+        }
+        return "<html>\n" + "<header><title>Welcome</title></header>\n" +
+          "<body>\n" + textTags + "\n" + "</body>\n" + "</html>";
+    }
+
 }
