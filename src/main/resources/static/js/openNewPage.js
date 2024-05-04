@@ -1,5 +1,13 @@
-$('body').on('click', '#openOnNewPage', function() {
-    var copyHTML = $('#htmlFilesFolder').html();
-    var newWindow = window.open('newPage');
-    newWindow.document.body.innerHTML = copyHTML;
+$('body').on('click', '#htmlFileButton', function() {
+    var txt = $(this).val().toString();
+    var api_path = "/getHtmlPath";
+    $.ajax({
+        type: "GET",
+        url: api_path,
+        dataType: "text",
+        data: {name: txt.toString()},
+        success:function(result) {
+            window.open(result); 
+        },
+    });
 });

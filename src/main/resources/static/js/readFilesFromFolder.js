@@ -23,8 +23,7 @@ $('body').on('click', '#pickFilesButton', async (evt) => {
                 data: JSON.stringify(settingsList),
                 contentType:"application/json; charset=utf-8",
                 dataType: "text",
-                success:function(result) {
-                    console.log(result);
+                success:function() {
                     console.log(settingsList);
                 },
             });

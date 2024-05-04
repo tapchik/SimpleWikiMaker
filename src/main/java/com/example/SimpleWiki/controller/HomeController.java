@@ -38,13 +38,9 @@ public class HomeController {
     }
 
     @RequestMapping("/")
-    public String index() {
+    public String index() 
+    {
         return "index";
-    }
-
-    @RequestMapping("/123")
-    public String RepoOnNewPage() {
-        return "newPage";
     }
 
     @RequestMapping("/mdDirButtonClick")
@@ -77,10 +73,11 @@ public class HomeController {
         model.addAttribute("showMdBackButton", true);
         model.addAttribute("currentMdFiles", mdRepository.fileRepository.GetCurrentFiles());
         return "fragments/listOfMdFiles";
-    }
+    } 
 
     @RequestMapping("/mdBackButtonClick")
-    public String MdSetCurrentFilesDown(Model model) {
+    public String MdSetCurrentFilesDown(Model model) 
+    {
         mdRepository.fileRepository.CurrentFilesDown();
         model.addAttribute("showMdBackButton", mdRepository.fileRepository.GetCurrentFolderPath().equals("/") ? true : false);
         model.addAttribute("currentMdFiles", mdRepository.fileRepository.GetCurrentFiles());
@@ -88,7 +85,8 @@ public class HomeController {
     }
 
     @RequestMapping("/htmlBackButtonClick")
-    public String HtmlSetCurrentFilesDown(Model model) {
+    public String HtmlSetCurrentFilesDown(Model model) 
+    {
         htmlRepository.fileRepository.CurrentFilesDown();
         model.addAttribute("showHtmlBackButton", htmlRepository.fileRepository.GetCurrentFolderPath().equals("/") ? true : false);
         model.addAttribute("currentHtmlFiles", htmlRepository.fileRepository.GetCurrentFiles());
@@ -96,7 +94,8 @@ public class HomeController {
     }
 
     @RequestMapping("/convertRepoToHtml")
-    public String ConvertMdFilesToHtml(Model model) {
+    public String ConvertMdFilesToHtml(Model model) 
+    {
         complexFiles = new HashMap<File,File>();
         htmlRepository.fileRepository.SetByRepository(mdRepository.fileRepository, htmlRepository, complexFiles);
         htmlRepository.AddLinksToFiles();
@@ -105,13 +104,19 @@ public class HomeController {
         return "fragments/listOfHtmlFiles";
     }
 
+    @RequestMapping("/getHtmlPath")
+    @ResponseBody
+    public String GetHtmlPathByName(@RequestParam(value = "name") String name) 
+    {
+        return htmlRepository.GetPathByName(name);
+    }
+
     @RequestMapping("/setSettingsFiles")
     @ResponseBody
-    public String SetSettingsFiles(@RequestBody List<File> settingFiles)
+    public void SetSettingsFiles(@RequestBody List<File> settingFiles)
     {
         settingsRepository = new FileRepository();
         settingsRepository.SetAllFiles(settingFiles);
-        return "Settings files fill";
     }
 
     @RequestMapping(produces = MediaType.TEXT_HTML_VALUE, value = "/p/**")
