@@ -74,6 +74,7 @@ public class HTMLFileRepository {
     }
 
     public String GetPathByName(String name) {
-        return "/p" + this.fileRepository.GetCurrentFolderPath() + name.split("\\.")[0];
+        return "/p" + this.fileRepository.GetCurrentFolderPath() + (this.fileRepository.GetCurrentFolderPath().equals("/") ? "" :
+        "/") + name.split("\\.")[0];
     }
 }
