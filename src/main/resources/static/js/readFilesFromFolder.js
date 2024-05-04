@@ -2,30 +2,37 @@ $('body').on('click', '#pickFilesButton', async (evt) => {
     const out = {};
     const dirHandle = await showDirectoryPicker();
     const fileList = [];
-    await handleDirectoryEntry(dirHandle.name.toString(), dirHandle, out, fileList);
-    var apiPath = "/setCurrentFolder";
+    const settingsList = [];
+    await handleDirectoryEntry("", dirHandle, out, fileList, settingsList);
+    var apiPath = "/setListOfMdFiles";
     $.ajax({
         type: "POST",
         url: apiPath,
-        data: {dirHandle: dirHandle.name.toString()},
+        data: JSON.stringify(fileList),
+        contentType:"application/json; charset=utf-8",
+        dataType: "text",
         success:function(result) {
-            var apiPath = "/listOfMdFiles";
+            $("#mdFiles").html(result);
+            console.log("MD files fill");
+            console.log(fileList);
+
+            var apiPath = "/setSettingsFiles";
             $.ajax({
                 type: "POST",
                 url: apiPath,
-                data: JSON.stringify(fileList),
+                data: JSON.stringify(settingsList),
+                contentType:"application/json; charset=utf-8",
                 dataType: "text",
-                contentType:'application/json',
                 success:function(result) {
-                    $("#mdFilesFolder").html(result);
-                    console.log("File repository(folder) fill");
+                    console.log(result);
+                    console.log(settingsList);
                 },
             });
         },
     });
 });
 
-async function handleDirectoryEntry(filePath, dirHandle, out, fileList) {
+async function handleDirectoryEntry(filePath, dirHandle, out, fileList, settingsList) {
     for await (const entry of dirHandle.values()) {
         if (entry.kind === "file") {
             const file = await entry.getFile();
@@ -39,6 +46,14 @@ async function handleDirectoryEntry(filePath, dirHandle, out, fileList) {
                 fileStr["path"] = filePath + "/" + file.name;
                 fileList.push(fileStr);
             }
+            else if (file.name === "theme.css") {
+                const fileContent = await file.text();
+                const settingStr = {};
+                settingStr["name"] = file.name;
+                settingStr["text"] = fileContent;
+                settingStr["type"] = "styleCSS";
+                settingsList.push(settingStr);
+            }
         }
         if (entry.kind === "directory") {
             const newHandle = await dirHandle.getDirectoryHandle(entry.name, {
@@ -51,7 +66,7 @@ async function handleDirectoryEntry(filePath, dirHandle, out, fileList) {
             fileStr["type"] = "dir";
             fileStr["path"] = filePath + "/" + newHandle.name;
             fileList.push(fileStr);
-            await handleDirectoryEntry(filePath + "/" + newHandle.name, newHandle, newOut, fileList);
+            await handleDirectoryEntry(filePath + "/" + newHandle.name, newHandle, newOut, fileList, settingsList);
         }
     }
 }
@@ -62,8 +77,8 @@ $('body').on('click', '#mdBackButton', function() {
         type: "POST",
         url: api_path,
         success:function(result) {
-            $("#mdFilesFolder").html(result);
-            console.log("File repository(folder) fill");
+            $("#mdFiles").html(result);
+            console.log("MD files fill");
         },
     });
 });
@@ -74,8 +89,8 @@ $('body').on('click', '#htmlBackButton', function() {
         type: "POST",
         url: api_path,
         success:function(result) {
-            $("#htmlFilesFolder").html(result);
-            console.log("File repository(folder) fill");
+            $("#htmlFiles").html(result);
+            console.log("HTML files fill");
         },
     });
 });

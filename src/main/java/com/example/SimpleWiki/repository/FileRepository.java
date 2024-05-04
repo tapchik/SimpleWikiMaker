@@ -59,7 +59,7 @@ public class FileRepository {
     {  
         for(File file: this.allFiles)
         {
-            if (file.GetPath().substring(0, file.GetPath().lastIndexOf("/")).equals(this.currentFolderPath))
+            if (file.GetPath().substring(0, file.GetPath().lastIndexOf("/") == 0 ? 1 : file.GetPath().lastIndexOf("/")).equals(this.currentFolderPath))
             {
                 this.currentFiles.add(file);
             }
@@ -68,23 +68,20 @@ public class FileRepository {
 
     public void SetClearRepository() {
         this.allFiles = new ArrayList<File>();
-        this.currentFolderPath = "";
+        this.currentFolderPath = "/";
+        this.folderPath = "/";
         this.currentFiles = new ArrayList<File>();
-    }
-
-    public File GetFileByName(String name) {
-        return this.currentFiles.stream().filter(file -> name.equals(file.GetName())).findFirst().orElse(null);
     }
 
     public void CurrentFilesUp(String name) {
         this.currentFiles = new ArrayList<File>();
-        this.currentFolderPath += "/" + name;
+        this.currentFolderPath += this.currentFolderPath.equals("/") ? name : "/" + name;
         this.SetCurrentFiles();
     }
 
     public void CurrentFilesDown() {
         this.currentFiles = new ArrayList<File>();
-        this.currentFolderPath = this.currentFolderPath.substring(0, this.currentFolderPath.lastIndexOf("/"));
+        this.currentFolderPath = this.currentFolderPath.substring(0, this.currentFolderPath.lastIndexOf("/") == 0 ? 1 : this.currentFolderPath.lastIndexOf("/"));
         this.SetCurrentFiles();
     }
 

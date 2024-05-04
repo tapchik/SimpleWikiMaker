@@ -1,7 +1,5 @@
 package com.example.SimpleWiki.model;
 
-import javax.swing.text.html.HTML;
-
 public class File {
     private String name;
     private String text;

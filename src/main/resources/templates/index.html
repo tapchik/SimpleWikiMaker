@@ -5,42 +5,30 @@
     <title>MDToHtml</title>
     <link th:href="@{/css/index.css}" rel="stylesheet" />
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link th:href="@{/css/bootstrap.css}" rel="stylesheet"/>
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-    <!-- Latest compiled JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
-    <h1 style="margin: 10px; text-align: center;">Markdown to HTML</h1>
-    <div style="margin-left: 100px; margin-right: 100px;">
+    <h1 style="margin: 30px; text-align: center;">Markdown to HTML</h1>
+    <div style="margin-left: 140px; margin-right: 100px;">
         <div class="fileManagerDiv">
-            <h2>MD Repository</h2>
+            <h2>Markdown files</h2>
             <div id="mdBtnContainer">
                 <button id="pickFilesButton">pick files</button>
                 <button id="convertAllButton">convert all</button>
             </div>
             <div class="files">
-                <div th:insert="~{fragments/listOfMdFiles.html :: div}" id="mdFilesFolder"></div>
+                <div th:insert="~{fragments/listOfMdFiles.html :: div}" id="mdFiles"></div>
             </div>
         </div>
         <div class="fileManagerDiv">
-            <h2>HTML Repository</h2>
+            <h2>HTML files</h2>
             <button id="openOnNewPage">open on new page</button>
             <div class="files">
-                <div th:insert="~{fragments/listOfHtmlFiles.html :: div}" id="htmlFilesFolder"></div>
+                <div th:insert="~{fragments/listOfHtmlFiles.html :: div}" id="htmlFiles"></div>
             </div>
-        </div>
-    </div>
-    <div style="margin-left: 100px; margin-right: 100px;">
-        <div class="textDivs">
-            <h2>Markdown text</h2>
-            <textarea id="textBefore"></textarea>
-            <button id="convertButton">convert</button>
-        </div>
-        <div class="textDivs">
-            <h2>HTML text</h2>
-            <textarea id="textAfter"></textarea>
         </div>
     </div>
     <script th:src="@{/js/readFilesFromFolder.js}" type="text/javascript"> </script>

@@ -27,14 +27,6 @@ public class HTMLFile {
         this.path = path;
     }
     
-    public String AddDefaultTagsStart() {
-        return "";
-    }
-
-    public String AddDefaultTagsEnd() {
-        return "";
-    }
-
     public void AddTextTags(String text) {
         this.textTags += "\n" + text;
     }
