@@ -58,14 +58,17 @@ async function handleDirectoryEntry(filePath, dirHandle, out, fileList, settings
             const newHandle = await dirHandle.getDirectoryHandle(entry.name, {
                 create: false,
             });
-            const newOut = (out[entry.name]={});
-            const fileStr = {};
-            fileStr["name"] = newHandle.name;
-            fileStr["text"] = null;
-            fileStr["type"] = "dir";
-            fileStr["path"] = filePath + "/" + newHandle.name;
-            fileList.push(fileStr);
-            await handleDirectoryEntry(filePath + "/" + newHandle.name, newHandle, newOut, fileList, settingsList);
+            if (newHandle.name !== ".obsidian")
+            {
+                const newOut = (out[entry.name]={});
+                const fileStr = {};
+                fileStr["name"] = newHandle.name;
+                fileStr["text"] = null;
+                fileStr["type"] = "dir";
+                fileStr["path"] = filePath + "/" + newHandle.name;
+                fileList.push(fileStr);
+                await handleDirectoryEntry(filePath + "/" + newHandle.name, newHandle, newOut, fileList, settingsList);
+            }
         }
     }
 }

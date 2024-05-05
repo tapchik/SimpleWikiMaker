@@ -3,11 +3,15 @@ import java.util.*;
 import com.example.SimpleWiki.model.MDFile;
 import com.example.SimpleWiki.model.File;
 
-import scala.annotation.meta.field;
-
 public class MDFileRepository {
     public FileRepository fileRepository;
     private List<MDFile> mdFiles;
+
+    public MDFileRepository()
+    {
+        this.mdFiles = new ArrayList<MDFile>();
+        this.fileRepository = new FileRepository();
+    }
 
     public List<MDFile> GetMdFiles() {
         List<MDFile> listMd = new ArrayList<MDFile>() {};
@@ -19,12 +23,6 @@ public class MDFileRepository {
             }
         }
         return listMd;
-    }
-
-    public MDFileRepository()
-    {
-        this.mdFiles = new ArrayList<MDFile>();
-        this.fileRepository = new FileRepository();
     }
 
     public void AddFile(MDFile mdFile)

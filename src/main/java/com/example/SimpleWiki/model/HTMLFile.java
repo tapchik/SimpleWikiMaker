@@ -5,6 +5,8 @@ public class HTMLFile {
     private String textTags;
     private String path;
 
+    private File theme;
+
     public String GetName() {
         return this.name;
     }
@@ -19,6 +21,14 @@ public class HTMLFile {
 
     public void SetText(String text) {
         this.textTags = text;
+    }
+
+    public void SetTheme(File theme) {
+        this.theme = theme;
+    }
+
+    public File GetTheme() {
+        return this.theme;
     }
 
     public HTMLFile(String name, String textTags, String path) {

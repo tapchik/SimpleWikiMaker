@@ -5,11 +5,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.swing.text.html.HTML;
-
-import com.example.SimpleWiki.model.File;
 import com.example.SimpleWiki.model.HTMLFile;
-import com.example.SimpleWiki.model.MDFile;
+import com.example.SimpleWiki.model.File;
 import com.ibm.icu.text.MessageFormat;
 
 public class HTMLFileRepository {
@@ -31,12 +28,12 @@ public class HTMLFileRepository {
         this.listHtmlFiles.add(file);
     }
 
-    public String FindByPath(String path) {
+    public HTMLFile FindByPath(String path) {
         for (HTMLFile htmlFile: this.listHtmlFiles)
         {
             if (htmlFile.GetPath().equals(path))
             {
-                return htmlFile.GetText();
+                return htmlFile;
             }
         }
         return null;
@@ -62,7 +59,6 @@ public class HTMLFileRepository {
             Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
             String line = htmlFile.GetText();
             Matcher matcher = pattern.matcher(line);
-            //System.out.println(htmlFile.GetPath());
             if (matcher.find())
             {
                 System.out.println(matcher.group(1));
@@ -76,5 +72,11 @@ public class HTMLFileRepository {
     public String GetPathByName(String name) {
         return "/p" + this.fileRepository.GetCurrentFolderPath() + (this.fileRepository.GetCurrentFolderPath().equals("/") ? "" :
         "/") + name.split("\\.")[0];
+    }
+
+    public void SetDefaultFilesTheme(File themeFile) {
+        for (HTMLFile htmlFile: this.listHtmlFiles) {
+            htmlFile.SetTheme(themeFile);
+        }
     }
 }

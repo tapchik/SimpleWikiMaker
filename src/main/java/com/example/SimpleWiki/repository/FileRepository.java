@@ -3,7 +3,6 @@ import java.util.*;
 
 import com.example.SimpleWiki.model.File;
 import com.example.SimpleWiki.model.HTMLFile;
-import com.example.SimpleWiki.model.MDFile;
 
 public class FileRepository {
     private String currentFolderPath;
@@ -43,7 +42,16 @@ public class FileRepository {
 
     public void SetFolderPath(String folderPath) {
         this.folderPath = folderPath;
-    } 
+    }
+    
+    public File GetFileByType(String type) {
+        for (File file: this.allFiles) {
+            if (file.GetType().equals(type)) {
+                return file;
+            }
+        }
+        return null;
+    }
 
     public void AddFile(String fileName, String fileText, String fileType, String filePath)
     {
@@ -85,31 +93,20 @@ public class FileRepository {
         this.SetCurrentFiles();
     }
 
-    public void SetByRepository(FileRepository mdRepository, HTMLFileRepository htmlFileRepository, Map<File, File> complexFiles) {
-        for (File fileMd: mdRepository.GetAllFiles()) 
+    public void SetByRepository(MDFileRepository mdRepository, HTMLFileRepository htmlFileRepository) {
+        for (File fileMd: mdRepository.fileRepository.GetAllFiles()) 
         {
             if (fileMd.GetType().equals("dir"))
             {
-                complexFiles.put(fileMd, fileMd);
+                htmlFileRepository.fileRepository.AddFile(fileMd);
             }
             else if (fileMd.GetType().equals("file"))
             {
                 File newHtmlFile = new File(fileMd.GetName().split("\\.")[0] + ".html", "<h1>" + fileMd.GetName().split("\\.")[0] + "</h1>",fileMd.GetPath().split("\\.")[0] + ".html","file");
-                complexFiles.put(fileMd, newHtmlFile);
-            }
-        }
-        for (Map.Entry<File, File> entry : complexFiles.entrySet()) {
-            if (entry.getKey().GetType().equals("dir"))
-            {
-                htmlFileRepository.fileRepository.AddFile(entry.getValue());
-            }
-            else if (entry.getKey().GetType().equals("file"))
-            {
-                MDFile fileMd = entry.getKey().FileToMd();
-                HTMLFile fileHtml = entry.getValue().FileToHtml();
-                fileHtml.AddTextTags(fileMd.ConvertToHtml());
+                HTMLFile fileHtml = newHtmlFile.FileToHtml();
+                fileHtml.AddTextTags(fileMd.FileToMd().ConvertToHtml());
                 htmlFileRepository.AddHtmlFile(fileHtml);
-                htmlFileRepository.fileRepository.AddFile(new File(entry.getValue().GetName(), fileHtml.GetText(), entry.getValue().GetPath(), entry.getValue().GetType()));
+                htmlFileRepository.fileRepository.AddFile(new File(fileHtml.GetName(), fileHtml.GetText(), fileHtml.GetPath(), "file"));
             }
         }
         this.currentFolderPath = this.folderPath;

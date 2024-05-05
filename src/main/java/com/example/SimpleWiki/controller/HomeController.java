@@ -1,8 +1,6 @@
 package com.example.SimpleWiki.controller;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -15,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.HandlerMapping;
 
 import com.example.SimpleWiki.model.File;
+import com.example.SimpleWiki.model.HTMLFile;
 import com.example.SimpleWiki.repository.FileRepository;
 import com.example.SimpleWiki.repository.HTMLFileRepository;
 import com.example.SimpleWiki.repository.MDFileRepository;
@@ -25,7 +24,6 @@ import jakarta.servlet.http.HttpServletRequest;
 public class HomeController {
     MDFileRepository mdRepository;
     HTMLFileRepository htmlRepository;
-    Map<File, File> complexFiles;
 
     FileRepository settingsRepository;
 
@@ -34,7 +32,6 @@ public class HomeController {
         mdRepository = new MDFileRepository();
         htmlRepository = new HTMLFileRepository();
         settingsRepository = new FileRepository();
-        complexFiles = new HashMap<File,File>();
     }
 
     @RequestMapping("/")
@@ -66,7 +63,6 @@ public class HomeController {
     {
         mdRepository = new MDFileRepository();
         htmlRepository = new HTMLFileRepository();
-        complexFiles = new HashMap<File,File>();
 
         mdRepository.fileRepository.SetAllFiles(allFiles);
         mdRepository.fileRepository.SetCurrentFiles();
@@ -96,8 +92,8 @@ public class HomeController {
     @RequestMapping("/convertRepoToHtml")
     public String ConvertMdFilesToHtml(Model model) 
     {
-        complexFiles = new HashMap<File,File>();
-        htmlRepository.fileRepository.SetByRepository(mdRepository.fileRepository, htmlRepository, complexFiles);
+        htmlRepository.fileRepository.SetByRepository(mdRepository, htmlRepository);
+        htmlRepository.SetDefaultFilesTheme(settingsRepository.GetFileByType("styleCSS"));
         htmlRepository.AddLinksToFiles();
         model.addAttribute("showHtmlBackButton", true);
         model.addAttribute("currentHtmlFiles", htmlRepository.fileRepository.GetCurrentFiles());
@@ -123,15 +119,15 @@ public class HomeController {
     @ResponseBody
     public String GetHtmlPage(HttpServletRequest request) {
         String restOfTheUrl = new AntPathMatcher().extractPathWithinPattern(request.getAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE).toString(),request.getRequestURI());
-        String textTags = htmlRepository.FindByPath("/" + restOfTheUrl+".html");
-        if (textTags == null)
+        HTMLFile htmlFile = htmlRepository.FindByPath("/" + restOfTheUrl+".html");
+        if (htmlFile == null)
         {
             return "<html>\n" + "<head><title>Welcome</title></head>\n" +
           "<body>\n" + "File doesnt exist" + "\n" + "</body>\n" + "</html>";
         }
         return "<html>\n" + "<head><title>Welcome</title>"
-        + "<style>" + settingsRepository.GetAllFiles().get(0).GetText() + "</style>" + "</head>\n" 
-        + "<body>\n" + textTags + "\n" + "</body>\n" + "</html>";
+        + "<style>" + htmlFile.GetTheme().GetText() + "</style>" + "</head>\n" 
+        + "<body>\n" + htmlFile.GetText() + "\n" + "</body>\n" + "</html>";
     }
 
 }
