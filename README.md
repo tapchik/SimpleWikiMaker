@@ -1,10 +1,10 @@
 # Getting Started
 
-### Start project
+### To start project
 - Download Java 17 or later
 - Download Maven 3.5+
-- Open project in VSCode
-- Type **./mvnw spring-boot:run** on folder that contains pom.xml 
+- Open repository folder in VSCode
+- `cd ..\SimpleWikiMaker` and type `./mvnw spring-boot:run` 
 
 ### Reference Documentation
 For further reference, please consider the following sections:
