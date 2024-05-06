@@ -1,0 +1,24 @@
+<div class="item" th:fragment="file(name, type, typeOfRepo)" th:switch="${type}" xmlns:th="http://www.thymeleaf.org">
+    <div class="icon">
+        <svg th:case="dir" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"></path>
+        </svg>
+        <svg th:case="*" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+        </svg>
+    </div>
+    <div th:switch="${typeOfRepo}">
+        <div th:case="markdown">
+            <div th:switch="${type}">
+                <button th:case="dir" id="mdDirButton" th:text="${name}" th:value="${name}"></button>
+                <button th:case="*" id="mdFileButton" th:text="${name}" th:value="${name}"></button>
+            </div>
+        </div>
+        <div th:case="*">
+            <div th:switch="${type}">
+                <button th:case="dir" id="htmlDirButton" th:text="${name}" th:value="${name}"></button>
+                <button th:case="*" id="htmlFileButton" th:text="${name}" th:value="${name}"></button>
+            </div>
+        </div>
+    </div>
+</div>
