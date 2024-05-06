@@ -3,7 +3,7 @@
 ### Start project
 - Download Java 17 or later
 - Download Maven 3.5+
-- Open project in VSCode
+- Open repository folder in VSCode
 - Type **./mvnw spring-boot:run** on folder that contains pom.xml 
 
 ### Reference Documentation
