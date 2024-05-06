@@ -61,7 +61,7 @@ public class HTMLFileRepository {
             Matcher matcher = pattern.matcher(line);
             if (matcher.find())
             {
-                System.out.println(matcher.group(1));
+                System.out.println(matcher.group(1).split("/")[matcher.group(1).split("/").length - 1]);
                 line = matcher.replaceAll(match -> MessageFormat.format("<a href={0}>{1}</a>", 
                 "/p/"+match.group(1), match.group(1)));
                 htmlFile.SetText(line);

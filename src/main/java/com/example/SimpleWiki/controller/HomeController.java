@@ -35,7 +35,7 @@ public class HomeController {
     }
 
     @RequestMapping("/")
-    public String index() 
+    public String index(Model model) 
     {
         return "index";
     }
@@ -92,10 +92,27 @@ public class HomeController {
     @RequestMapping("/convertRepoToHtml")
     public String ConvertMdFilesToHtml(Model model) 
     {
+        htmlRepository = new HTMLFileRepository();
         htmlRepository.fileRepository.SetByRepository(mdRepository, htmlRepository);
         htmlRepository.SetDefaultFilesTheme(settingsRepository.GetFileByType("styleCSS"));
         htmlRepository.AddLinksToFiles();
         model.addAttribute("showHtmlBackButton", true);
+        model.addAttribute("currentHtmlFiles", htmlRepository.fileRepository.GetCurrentFiles());
+        return "fragments/listOfHtmlFiles";
+    }
+
+    @RequestMapping("/getMdFolder")
+    public String GetMdFolder(Model model)
+    {
+        model.addAttribute("showMdBackButton", mdRepository.fileRepository.GetCurrentFolderPath().equals("/") ? true : false);
+        model.addAttribute("currentMdFiles", mdRepository.fileRepository.GetCurrentFiles());
+        return "fragments/listOfMdFiles";
+    }
+
+    @RequestMapping("/getHtmlFolder")
+    public String GetHtmlFolder(Model model)
+    {
+        model.addAttribute("showHtmlBackButton", htmlRepository.fileRepository.GetCurrentFolderPath().equals("/") ? true : false);
         model.addAttribute("currentHtmlFiles", htmlRepository.fileRepository.GetCurrentFiles());
         return "fragments/listOfHtmlFiles";
     }
@@ -119,6 +136,7 @@ public class HomeController {
     @ResponseBody
     public String GetHtmlPage(HttpServletRequest request) {
         String restOfTheUrl = new AntPathMatcher().extractPathWithinPattern(request.getAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE).toString(),request.getRequestURI());
+        System.out.println(restOfTheUrl);
         HTMLFile htmlFile = htmlRepository.FindByPath("/" + restOfTheUrl+".html");
         if (htmlFile == null)
         {
@@ -126,7 +144,7 @@ public class HomeController {
           "<body>\n" + "File doesnt exist" + "\n" + "</body>\n" + "</html>";
         }
         return "<html>\n" + "<head><title>Welcome</title>"
-        + "<style>" + htmlFile.GetTheme().GetText() + "</style>" + "</head>\n" 
+        + "<style>" + (htmlFile.GetTheme() == null ? "" : htmlFile.GetTheme().GetText()) + "</style>" + "</head>\n" 
         + "<body>\n" + htmlFile.GetText() + "\n" + "</body>\n" + "</html>";
     }
 

@@ -15,7 +15,6 @@ $('body').on('click', '#pickFilesButton', async (evt) => {
             $("#mdFiles").html(result);
             console.log("MD files fill");
             console.log(fileList);
-
             var apiPath = "/setSettingsFiles";
             $.ajax({
                 type: "POST",
@@ -25,6 +24,15 @@ $('body').on('click', '#pickFilesButton', async (evt) => {
                 dataType: "text",
                 success:function() {
                     console.log(settingsList);
+                    var api_path = "/getHtmlFolder";
+                    $.ajax({
+                        type: "POST",
+                        url: api_path,
+                        success:function(result) {
+                            $("#htmlFiles").html(result);
+                            console.log("HTML files fill");
+                        },
+                    });
                 },
             });
         },
@@ -93,6 +101,28 @@ $('body').on('click', '#htmlBackButton', function() {
         success:function(result) {
             $("#htmlFiles").html(result);
             console.log("HTML files fill");
+        },
+    });
+});
+
+$(document).ready(function() {
+    console.log("Ready!");
+    var api_path = "/getHtmlFolder";
+    $.ajax({
+        type: "POST",
+        url: api_path,
+        success:function(result) {
+            $("#htmlFiles").html(result);
+            console.log("HTML files fill");
+        },
+    });
+    var api_path = "/getMdFolder";
+    $.ajax({
+        type: "POST",
+        url: api_path,
+        success:function(result) {
+            $("#mdFiles").html(result);
+            console.log("MD files fill");
         },
     });
 });
