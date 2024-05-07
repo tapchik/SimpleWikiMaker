@@ -13,24 +13,21 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.HandlerMapping;
 
 import com.example.SimpleWiki.model.File;
-import com.example.SimpleWiki.model.HTMLFile;
 import com.example.SimpleWiki.repository.FileRepository;
-import com.example.SimpleWiki.repository.HTMLFileRepository;
-import com.example.SimpleWiki.repository.MDFileRepository;
 
 import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 public class HomeController {
-    MDFileRepository mdRepository;
-    HTMLFileRepository htmlRepository;
+    FileRepository mdRepository;
+    FileRepository htmlRepository;
 
     FileRepository settingsRepository;
 
     public HomeController()
     {
-        mdRepository = new MDFileRepository();
-        htmlRepository = new HTMLFileRepository();
+        mdRepository = new FileRepository();
+        htmlRepository = new FileRepository();
         settingsRepository = new FileRepository();
     }
 
@@ -43,8 +40,8 @@ public class HomeController {
     @RequestMapping("/mdDirButtonClick")
     public String MdDirClick(Model model, @RequestParam(value = "name") String name)
     {
-        mdRepository.fileRepository.CurrentFilesUp(name);
-        model.addAttribute("currentMdFiles", mdRepository.fileRepository.GetCurrentFiles());
+        mdRepository.CurrentFilesUp(name);
+        model.addAttribute("currentMdFiles", mdRepository.GetCurrentFiles());
         model.addAttribute("showMdBackButton", false);
         return "fragments/listOfMdFiles";
     }
@@ -52,8 +49,8 @@ public class HomeController {
     @RequestMapping("/htmlDirButtonClick")
     public String HtmlDirClick(Model model, @RequestParam(value = "name") String name)
     {
-        htmlRepository.fileRepository.CurrentFilesUp(name);
-        model.addAttribute("currentHtmlFiles", htmlRepository.fileRepository.GetCurrentFiles());
+        htmlRepository.CurrentFilesUp(name);
+        model.addAttribute("currentHtmlFiles", htmlRepository.GetCurrentFiles());
         model.addAttribute("showHtmlBackButton", false);
         return "fragments/listOfHtmlFiles";
     }
@@ -61,59 +58,57 @@ public class HomeController {
     @RequestMapping("/setListOfMdFiles")
     public String SetCurrentFiles(Model model, @RequestBody List<File> allFiles) 
     {
-        mdRepository = new MDFileRepository();
-        htmlRepository = new HTMLFileRepository();
+        mdRepository = new FileRepository();
+        htmlRepository = new FileRepository();
 
-        mdRepository.fileRepository.SetAllFiles(allFiles);
-        mdRepository.fileRepository.SetCurrentFiles();
+        mdRepository.SetAllFiles(allFiles);
+        mdRepository.SetCurrentFiles();
         model.addAttribute("showMdBackButton", true);
-        model.addAttribute("currentMdFiles", mdRepository.fileRepository.GetCurrentFiles());
+        model.addAttribute("currentMdFiles", mdRepository.GetCurrentFiles());
         return "fragments/listOfMdFiles";
     } 
 
     @RequestMapping("/mdBackButtonClick")
     public String MdSetCurrentFilesDown(Model model) 
     {
-        mdRepository.fileRepository.CurrentFilesDown();
-        model.addAttribute("showMdBackButton", mdRepository.fileRepository.GetCurrentFolderPath().equals("/") ? true : false);
-        model.addAttribute("currentMdFiles", mdRepository.fileRepository.GetCurrentFiles());
+        mdRepository.CurrentFilesDown();
+        model.addAttribute("showMdBackButton", mdRepository.GetCurrentFolderPath().equals("/") ? true : false);
+        model.addAttribute("currentMdFiles", mdRepository.GetCurrentFiles());
         return "fragments/listOfMdFiles";
     }
 
     @RequestMapping("/htmlBackButtonClick")
     public String HtmlSetCurrentFilesDown(Model model) 
     {
-        htmlRepository.fileRepository.CurrentFilesDown();
-        model.addAttribute("showHtmlBackButton", htmlRepository.fileRepository.GetCurrentFolderPath().equals("/") ? true : false);
-        model.addAttribute("currentHtmlFiles", htmlRepository.fileRepository.GetCurrentFiles());
+        htmlRepository.CurrentFilesDown();
+        model.addAttribute("showHtmlBackButton", htmlRepository.GetCurrentFolderPath().equals("/") ? true : false);
+        model.addAttribute("currentHtmlFiles", htmlRepository.GetCurrentFiles());
         return "fragments/listOfHtmlFiles";
     }
 
     @RequestMapping("/convertRepoToHtml")
     public String ConvertMdFilesToHtml(Model model) 
     {
-        htmlRepository = new HTMLFileRepository();
-        htmlRepository.fileRepository.SetByRepository(mdRepository, htmlRepository);
-        htmlRepository.SetDefaultFilesTheme(settingsRepository.GetFileByType("styleCSS"));
-        htmlRepository.AddLinksToFiles();
+        htmlRepository = new FileRepository();
+        htmlRepository.SetHtmlRepositoryByMd(mdRepository);
         model.addAttribute("showHtmlBackButton", true);
-        model.addAttribute("currentHtmlFiles", htmlRepository.fileRepository.GetCurrentFiles());
+        model.addAttribute("currentHtmlFiles", htmlRepository.GetCurrentFiles());
         return "fragments/listOfHtmlFiles";
     }
 
     @RequestMapping("/getMdFolder")
     public String GetMdFolder(Model model)
     {
-        model.addAttribute("showMdBackButton", mdRepository.fileRepository.GetCurrentFolderPath().equals("/") ? true : false);
-        model.addAttribute("currentMdFiles", mdRepository.fileRepository.GetCurrentFiles());
+        model.addAttribute("showMdBackButton", mdRepository.GetCurrentFolderPath().equals("/") ? true : false);
+        model.addAttribute("currentMdFiles", mdRepository.GetCurrentFiles());
         return "fragments/listOfMdFiles";
     }
 
     @RequestMapping("/getHtmlFolder")
     public String GetHtmlFolder(Model model)
     {
-        model.addAttribute("showHtmlBackButton", htmlRepository.fileRepository.GetCurrentFolderPath().equals("/") ? true : false);
-        model.addAttribute("currentHtmlFiles", htmlRepository.fileRepository.GetCurrentFiles());
+        model.addAttribute("showHtmlBackButton", htmlRepository.GetCurrentFolderPath().equals("/") ? true : false);
+        model.addAttribute("currentHtmlFiles", htmlRepository.GetCurrentFiles());
         return "fragments/listOfHtmlFiles";
     }
 
@@ -137,14 +132,14 @@ public class HomeController {
     public String GetHtmlPage(HttpServletRequest request) {
         String restOfTheUrl = new AntPathMatcher().extractPathWithinPattern(request.getAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE).toString(),request.getRequestURI());
         System.out.println(restOfTheUrl);
-        HTMLFile htmlFile = htmlRepository.FindByPath("/" + restOfTheUrl+".html");
+        File htmlFile = htmlRepository.GetFileByPath("/" + restOfTheUrl+".html");
         if (htmlFile == null)
         {
             return "<html>\n" + "<head><title>Welcome</title></head>\n" +
           "<body>\n" + "File doesnt exist" + "\n" + "</body>\n" + "</html>";
         }
         return "<html>\n" + "<head><title>Welcome</title>"
-        + "<style>" + (htmlFile.GetTheme() == null ? "" : htmlFile.GetTheme().GetText()) + "</style>" + "</head>\n" 
+        + "<style>" + (settingsRepository.GetAllFiles().size() == 0 ? "" : settingsRepository.GetAllFiles().get(0).GetText()) + "</style>" + "</head>\n" 
         + "<body>\n" + htmlFile.GetText() + "\n" + "</body>\n" + "</html>";
     }
 

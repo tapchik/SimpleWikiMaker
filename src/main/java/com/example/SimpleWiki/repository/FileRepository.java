@@ -2,7 +2,6 @@ package com.example.SimpleWiki.repository;
 import java.util.*;
 
 import com.example.SimpleWiki.model.File;
-import com.example.SimpleWiki.model.HTMLFile;
 
 public class FileRepository {
     private String currentFolderPath;
@@ -53,6 +52,23 @@ public class FileRepository {
         return null;
     }
 
+    public File GetFileByPath(String path)
+    {
+        for (File file: this.allFiles)
+        {
+            if (file.GetPath().equals(path))
+            {
+                return file;
+            }
+        }
+        return null;
+    }
+
+    public String GetPathByName(String name) {
+        return "/p" + this.GetCurrentFolderPath() + (this.GetCurrentFolderPath().equals("/") ? "" :
+        "/") + name.split("\\.")[0];
+    }
+
     public void AddFile(String fileName, String fileText, String fileType, String filePath)
     {
         this.allFiles.add(new File(fileName, fileText, filePath, fileType));
@@ -93,24 +109,12 @@ public class FileRepository {
         this.SetCurrentFiles();
     }
 
-    public void SetByRepository(MDFileRepository mdRepository, HTMLFileRepository htmlFileRepository) {
-        for (File fileMd: mdRepository.fileRepository.GetAllFiles()) 
+    public void SetHtmlRepositoryByMd(FileRepository mdRepository) {
+        for (File fileMd: mdRepository.GetAllFiles()) 
         {
-            if (fileMd.GetType().equals("dir"))
-            {
-                htmlFileRepository.fileRepository.AddFile(fileMd);
-            }
-            else if (fileMd.GetType().equals("file"))
-            {
-                File newHtmlFile = new File(fileMd.GetName().split("\\.")[0] + ".html", "<h1>" + fileMd.GetName().split("\\.")[0] + "</h1>",fileMd.GetPath().split("\\.")[0] + ".html","file");
-                HTMLFile fileHtml = newHtmlFile.FileToHtml();
-                fileHtml.AddTextTags(fileMd.FileToMd().ConvertToHtml());
-                htmlFileRepository.AddHtmlFile(fileHtml);
-                htmlFileRepository.fileRepository.AddFile(new File(fileHtml.GetName(), fileHtml.GetText(), fileHtml.GetPath(), "file"));
-            }
+            this.AddFile(fileMd.FileToHtml());
         }
         this.currentFolderPath = this.folderPath;
         this.SetCurrentFiles();
     }
-
 }

@@ -12,12 +12,14 @@
 </head>
 <body>
     <h1 style="margin: 40px; text-align: center;">Markdown to HTML</h1>
-    <div style="margin-left: 140px; margin-right: 100px;" class="flex-container">
+    <div class="flex-container">
         <div class="fileManagerDiv">
-            <h2>Markdown files</h2>
-            <div id="mdBtnContainer">
-                <button id="pickFilesButton">select files</button>
-                <button id="convertAllButton">convert</button>
+            <div>
+                <h2>Markdown files</h2>
+                <div id="mdBtnContainer">
+                    <button id="pickFilesButton">select files</button>
+                    <button id="convertAllButton">convert</button>
+                </div>
             </div>
             <div class="files" th:insert="~{fragments/listOfMdFiles.html :: div}" id="mdFiles"></div>
         </div>
