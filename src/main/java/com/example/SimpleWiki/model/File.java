@@ -74,7 +74,9 @@ public class File {
         if (matcher.find())
         {
             line = matcher.replaceAll(match -> MessageFormat.format("<a href={0}>{1}</a>", 
-            "/p/"+match.group(1), match.group(1)));
+            "/p/"+ (match.group(1).indexOf("|") != -1 ? match.group(1).split("\\|")[0] : match.group(1)), 
+            (match.group(1).indexOf("|") != -1 ? match.group(1).split("\\|")[1] 
+            : (match.group(1).indexOf("/") != -1 ? match.group(1).substring(match.group(1).lastIndexOf("/")+1) : match.group(1)))));
             this.text = line;
         }
     }
