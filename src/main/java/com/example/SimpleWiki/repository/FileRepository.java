@@ -56,7 +56,7 @@ public class FileRepository {
     {
         for (File file: this.allFiles)
         {
-            if (file.GetPath().equals(path))
+            if (file.GetPath().replaceAll(" ", "%20").equals(path))
             {
                 return file;
             }
