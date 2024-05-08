@@ -16,7 +16,7 @@ textarea
 #html, #convertButton
 {position: absolute; right: 0; margin: 5px}
 
-#mdBtnContainer 
+#mdBtnContainer, #htmlBtnContainer
 {position: absolute; right: 0; margin: 5px;}
 
 #mdFileButton, #mdDirButton, #htmlFileButton, #htmlDirButton

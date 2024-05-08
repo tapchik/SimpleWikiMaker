@@ -17,14 +17,19 @@
             <div>
                 <h2>Markdown files</h2>
                 <div id="mdBtnContainer">
-                    <button id="pickFilesButton">select files</button>
+                    <button id="pickFilesButton">select folder</button>
                     <button id="convertAllButton">convert</button>
                 </div>
             </div>
             <div class="files" th:insert="~{fragments/listOfMdFiles.html :: div}" id="mdFiles"></div>
         </div>
         <div class="fileManagerDiv">
-            <h2>HTML files</h2>
+            <div>
+                <h2>HTML files</h2>
+                <div id="htmlBtnContainer">
+                    <button id="openWelcomePage">open welcome page</button>
+                </div>
+            </div>
             <div class="files" th:insert="~{fragments/listOfHtmlFiles.html :: div}" id="htmlFiles"></div>
         </div>
     </div>

@@ -131,7 +131,6 @@ public class HomeController {
     @ResponseBody
     public String GetHtmlPage(HttpServletRequest request) {
         String restOfTheUrl = new AntPathMatcher().extractPathWithinPattern(request.getAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE).toString(),request.getRequestURI());
-        System.out.println(restOfTheUrl);
         File htmlFile = htmlRepository.GetFileByPath("/" + restOfTheUrl + ".html");
         if (htmlFile == null)
         {
