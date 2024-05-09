@@ -4,6 +4,9 @@
 .fileManagerDiv
 {width: 600px; height: 300px; max-height: 300px; margin: 0 10px; display: inline-block; position: relative;}
 
+.flex-container 
+{display: flex; justify-content: center; margin-bottom: 20px;}
+
 .files
 {width: 600px; height: 250px; border: 1px solid black; overflow: auto; padding-left: 10px; padding-top: 10px;}
 
@@ -13,7 +16,7 @@ textarea
 #html, #convertButton
 {position: absolute; right: 0; margin: 5px}
 
-#mdBtnContainer, #openOnNewPage
+#mdBtnContainer, #htmlBtnContainer
 {position: absolute; right: 0; margin: 5px;}
 
 #mdFileButton, #mdDirButton, #htmlFileButton, #htmlDirButton

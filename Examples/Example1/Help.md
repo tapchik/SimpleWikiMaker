@@ -1,4 +1,4 @@
-# UsageSecond
+# Help
 ## Выделение текста
 *Курсивный текст* или _курсивный текст_. 
 **Полужирный текст** или __полужирный текст__. 
@@ -20,6 +20,5 @@
 [[Advantages]]
 [[Help]]
 [[Definition]]
-[[Example/Ex1/Ex1]]
-
-
+[[Example/Ex1/Ex1|Example]]
+[[Example with spaces|Example with spaces]]
