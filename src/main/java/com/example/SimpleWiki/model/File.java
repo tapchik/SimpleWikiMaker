@@ -67,17 +67,21 @@ public class File {
 
     public void AddLinks()
     {
-        String regex = "\\[\\[(([^\\[\\]\\n ])*)\\]\\]";
+        String regex = "\\[\\[([^\\[\\]\\n]+)\\]\\]";
         Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
         String line = this.GetText();
         Matcher matcher = pattern.matcher(line);
-        if (matcher.find())
+        while (matcher.find())
         {
-            line = matcher.replaceAll(match -> MessageFormat.format("<a href={0}>{1}</a>", 
-            "/p/"+ (match.group(1).indexOf("|") != -1 ? match.group(1).split("\\|")[0] : match.group(1)), 
-            (match.group(1).indexOf("|") != -1 ? match.group(1).split("\\|")[1] 
-            : (match.group(1).indexOf("/") != -1 ? match.group(1).substring(match.group(1).lastIndexOf("/")+1) : match.group(1)))));
-            this.text = line;
+            if (!matcher.group(1).trim().equals(""))
+            {
+                line = matcher.replaceFirst(match -> MessageFormat.format("<a href={0}>{1}</a>", 
+                "/p/"+ (match.group(1).indexOf("|") != -1 ? match.group(1).split("\\|")[0].replaceAll(" ", "%20") 
+                : match.group(1).replaceAll(" ", "%20")), 
+                (match.group(1).indexOf("|") != -1 ? match.group(1).split("\\|")[1] : match.group(1))));
+                matcher = pattern.matcher(line);
+            }
         }
+        this.text = line;
     }
 }
