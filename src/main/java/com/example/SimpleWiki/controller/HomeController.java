@@ -134,7 +134,7 @@ public class HomeController {
         File htmlFile = htmlRepository.GetFileByPath("/" + restOfTheUrl + ".html");
         if (htmlFile == null)
         {
-            return "<html>\n" + "<head><title>Welcome</title></head>\n" +
+            return "<html>\n" + "<head><title>Error</title></head>\n" +
           "<body>\n" + "File doesnt exist" + "\n" + "</body>\n" + "</html>";
         }
         return "<html>\n" + "<head><title>Welcome</title>"

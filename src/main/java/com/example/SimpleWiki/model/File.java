@@ -2,6 +2,9 @@ package com.example.SimpleWiki.model;
 
 import com.vladsch.flexmark.util.ast.Node;
 
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,6 +18,7 @@ public class File {
     private String text;
     private String path;
     private String type;
+    private Map<String, String> properties;
 
     public String GetName() {
         return name;
@@ -30,6 +34,11 @@ public class File {
 
     public String GetType() {
         return type;
+    }
+
+    public Map<String, String> GetProperties()
+    {
+        return properties;
     }
 
     public File(String name, String text, String path, String type)
@@ -56,6 +65,7 @@ public class File {
             HtmlRenderer renderer = HtmlRenderer.builder(options).build();
 
             // You can re-use parser and renderer instances
+            SetProperties();
             Node document = parser.parse(this.text);
             String htmlText = renderer.render(document);  // "<p>This is <em>Sparta</em></p>\n"
             File htmlFile = new File(this.GetName().split("\\.")[0] + ".html", htmlText, this.GetPath().split("\\.")[0] + ".html", this.GetType());
@@ -83,5 +93,21 @@ public class File {
             }
         }
         this.text = line;
+    }
+
+    public void SetProperties()
+    {
+        this.properties = new HashMap<String,String>();
+        String regex = "^---\\n(((.)+: (.)*\\n)+)---$";
+        Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
+        Matcher matcher = pattern.matcher(this.text);
+        if (matcher.find())
+        {
+            for (String line: matcher.group(1).split("\n"))
+            {
+                properties.put(line.split(": ")[0], line.split(": ")[1]);
+            }
+            this.text = matcher.replaceFirst("");
+        }
     }
 }
