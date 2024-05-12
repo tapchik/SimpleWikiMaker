@@ -1,8 +1,9 @@
 package com.example.SimpleWiki.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.AntPathMatcher;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.HandlerMapping;
+
 
 import com.example.SimpleWiki.model.File;
 import com.example.SimpleWiki.repository.FileRepository;
@@ -24,11 +26,24 @@ public class HomeController {
 
     FileRepository settingsRepository;
 
+    Map<String, Boolean> siteSettings;
+
+
     public HomeController()
     {
         mdRepository = new FileRepository();
         htmlRepository = new FileRepository();
         settingsRepository = new FileRepository();
+        SetClearSiteSettings();
+    }
+
+    public void SetClearSiteSettings()
+    {
+        siteSettings = new HashMap<String, Boolean>();
+        siteSettings.put("mainPage", false);
+        siteSettings.put("welcomePage", false);
+        siteSettings.put("navigation", false);
+        siteSettings.put("contactsBlock", false);
     }
 
     @RequestMapping("/")
@@ -89,8 +104,9 @@ public class HomeController {
     @RequestMapping("/convertRepoToHtml")
     public String ConvertMdFilesToHtml(Model model) 
     {
+        SetClearSiteSettings();
         htmlRepository = new FileRepository();
-        htmlRepository.SetHtmlRepositoryByMd(mdRepository);
+        htmlRepository.SetHtmlRepositoryByMd(mdRepository, siteSettings);
         model.addAttribute("showHtmlBackButton", true);
         model.addAttribute("currentHtmlFiles", htmlRepository.GetCurrentFiles());
         return "fragments/listOfHtmlFiles";
@@ -127,19 +143,21 @@ public class HomeController {
         settingsRepository.SetAllFiles(settingFiles);
     }
 
-    @RequestMapping(produces = MediaType.TEXT_HTML_VALUE, value = "/p/**")
-    @ResponseBody
-    public String GetHtmlPage(HttpServletRequest request) {
+    @RequestMapping(value = "/p/**")
+    public String GetHtmlPage(HttpServletRequest request, Model model) {
         String restOfTheUrl = new AntPathMatcher().extractPathWithinPattern(request.getAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE).toString(),request.getRequestURI());
         File htmlFile = htmlRepository.GetFileByPath("/" + restOfTheUrl + ".html");
-        if (htmlFile == null)
+        String title = "Error";
+        String stylesFile = (settingsRepository.GetFileByType("theme") == null ? "" : settingsRepository.GetFileByType("theme").GetText());
+        String tags = "<p>File doesnt exist</p>";
+        if (htmlFile != null)
         {
-            return "<html>\n" + "<head><title>Welcome</title></head>\n" +
-          "<body>\n" + "File doesnt exist" + "\n" + "</body>\n" + "</html>";
+            title = htmlFile.GetName();
+            tags = htmlFile.GetText();
         }
-        return "<html>\n" + "<head><title>Welcome</title>"
-        + "<style>" + (settingsRepository.GetAllFiles().size() == 0 ? "" : settingsRepository.GetAllFiles().get(0).GetText()) + "</style>" + "</head>\n" 
-        + "<body>\n" + htmlFile.GetText() + "\n" + "</body>\n" + "</html>";
+        model.addAttribute("title", title);
+        model.addAttribute("styles", stylesFile);
+        model.addAttribute("tags", tags);
+        return "page";
     }
-
 }

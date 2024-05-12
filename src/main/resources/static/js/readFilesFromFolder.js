@@ -58,7 +58,15 @@ async function handleDirectoryEntry(filePath, dirHandle, out, fileList, settings
                 const settingStr = {};
                 settingStr["name"] = file.name;
                 settingStr["text"] = fileContent;
-                settingStr["type"] = "styleCSS";
+                settingStr["type"] = "theme";
+                settingsList.push(settingStr);
+            }
+            else if (file.name === "info.txt") {
+                const fileContent = await file.text();
+                const settingStr = {};
+                settingStr["name"] = file.name;
+                settingStr["text"] = fileContent;
+                settingStr["type"] = "settings";
                 settingsList.push(settingStr);
             }
         }

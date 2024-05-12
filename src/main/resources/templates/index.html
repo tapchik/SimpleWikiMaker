@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8" />
-    <title>MDToHtml</title>
+    <title>Markdown to HTML</title>
     <link th:href="@{/css/index.css}" rel="stylesheet" />
     <!-- Latest compiled and minified CSS -->
     <link th:href="@{/css/bootstrap.css}" rel="stylesheet"/>
@@ -13,11 +13,18 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
 </head>
 <body>
-    <h1 style="margin: 40px; text-align: center;">Markdown to HTML</h1>
+    <div th:insert="~{fragments/mainMenu.html}"></div>
+    <div class="divHeader">
+        <h3>Interpreter</h3>
+    </div>
     <div class="flex-container">
         <div class="fileManagerDiv">
             <div th:insert="~{fragments/mdMenu.html :: nav}"></div>
             <div class="files" th:insert="~{fragments/listOfMdFiles.html :: div}" id="mdFiles"></div>
+        </div>
+        <div class="settingsDiv">
+            <div th:insert="~{fragments/settingsMenu.html :: nav}"></div>
+            <div class="settings" th:insert="~{fragments/settings.html :: div}"></div>
         </div>
         <div class="fileManagerDiv">
             <div th:insert="~{fragments/htmlMenu.html :: nav}"></div>
