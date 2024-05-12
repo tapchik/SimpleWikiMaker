@@ -109,7 +109,7 @@ public class FileRepository {
         this.SetCurrentFiles();
     }
 
-    public void SetHtmlRepositoryByMd(FileRepository mdRepository) {
+    public void SetHtmlRepositoryByMd(FileRepository mdRepository, Map<String, Boolean> siteSettings) {
         for (File fileMd: mdRepository.GetAllFiles()) 
         {
             this.AddFile(fileMd.FileToHtml());

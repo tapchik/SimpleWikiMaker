@@ -61,7 +61,7 @@ async function handleDirectoryEntry(filePath, dirHandle, out, fileList, settings
                 settingStr["type"] = "theme";
                 settingsList.push(settingStr);
             }
-            else if (file.name === "settings.txt") {
+            else if (file.name === "info.txt") {
                 const fileContent = await file.text();
                 const settingStr = {};
                 settingStr["name"] = file.name;

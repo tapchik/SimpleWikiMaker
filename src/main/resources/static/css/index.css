@@ -19,8 +19,8 @@
 #mdFileButton:hover, #mdDirButton:hover, #htmlFileButton:hover, #htmlDirButton:hover
 {color: #0000FF; }
 
-.divHeaders
-{ margin: 40px; text-align: center; }
+.divHeader
+{ margin: 40px; display:flex; align-items: center; justify-content: center; }
 
 svg 
 { width: 24px; height: 24px; }
