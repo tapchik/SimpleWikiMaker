@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.HandlerMapping;
 
+
 import com.example.SimpleWiki.model.File;
 import com.example.SimpleWiki.repository.FileRepository;
+import com.google.gson.*;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -23,6 +25,7 @@ public class HomeController {
     FileRepository htmlRepository;
 
     FileRepository settingsRepository;
+
 
     public HomeController()
     {
@@ -137,8 +140,9 @@ public class HomeController {
             return "<html>\n" + "<head><title>Error</title></head>\n" +
           "<body>\n" + "File doesnt exist" + "\n" + "</body>\n" + "</html>";
         }
-        return "<html>\n" + "<head><title>Welcome</title>"
-        + "<style>" + (settingsRepository.GetAllFiles().size() == 0 ? "" : settingsRepository.GetAllFiles().get(0).GetText()) + "</style>" + "</head>\n" 
+        
+        return "<html>\n" + "<head><title>" + htmlFile.GetName() + "</title>"
+        + "<style>" + (settingsRepository.GetFileByType("theme") == null ? "" : settingsRepository.GetFileByType("theme").GetText()) + "</style>" + "</head>\n" 
         + "<body>\n" + htmlFile.GetText() + "\n" + "</body>\n" + "</html>";
     }
 

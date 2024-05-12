@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Definition.md",
+                "file": "Advantages.md",
                 "mode": "source",
                 "source": false
               }
@@ -85,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Definition.md",
+                "file": "Advantages.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Definition.md",
+                "file": "Advantages.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Definition.md"
+                "file": "Advantages.md"
               }
             }
           }
@@ -148,8 +148,8 @@
   },
   "active": "2bdb1157ddb76e13",
   "lastOpenFiles": [
-    "Advantages.md",
     "Definition.md",
+    "Advantages.md",
     "Example/Example1.md",
     "Example/Ex1/Ex1.md"
   ]
