@@ -65,6 +65,7 @@ public class File {
 
             // You can re-use parser and renderer instances
             SetProperties();
+            System.out.println(this.text);
             Node document = parser.parse(this.text);
             String htmlText = renderer.render(document);  // "<p>This is <em>Sparta</em></p>\n" 
             File htmlFile = new File(this.GetName().split("\\.")[0] + ".html", htmlText, this.GetPath().split("\\.")[0] + ".html", this.GetType());
@@ -80,6 +81,7 @@ public class File {
         Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
         String line = this.GetText();
         Matcher matcher = pattern.matcher(line);
+        
         while (matcher.find())
         {
             if (!matcher.group(1).trim().equals(""))
