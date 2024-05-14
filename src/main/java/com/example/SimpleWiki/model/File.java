@@ -45,6 +45,7 @@ public class File {
         this.text = text;
         this.path = path;
         this.type = type;
+        this.properties = new HashMap<>();
     }
 
     public File FileToHtml()
