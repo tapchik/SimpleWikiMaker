@@ -1,7 +1,5 @@
 package com.example.SimpleWiki.model;
 
-import com.vladsch.flexmark.util.ast.Node;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -10,6 +8,7 @@ import java.util.regex.Pattern;
 import com.ibm.icu.text.MessageFormat;
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
+import com.vladsch.flexmark.util.ast.Node;
 import com.vladsch.flexmark.util.data.MutableDataSet;
 
 public class File {
@@ -65,7 +64,12 @@ public class File {
 
             // You can re-use parser and renderer instances
             String htmlText = this.text;
-            htmlText = SetProperties(htmlText);
+            // extract properties from frontmatter, if possible
+            if (HasFrontmatter(htmlText)) {
+                String frontmatter = ExtractFrontmatter(htmlText);
+                htmlText = RemoveFrontmatter(htmlText);
+                this.properties = ExtractProperties(frontmatter);
+            }
             Node document = parser.parse(htmlText);
             htmlText = renderer.render(document);  // "<p>This is <em>Sparta</em></p>\n" 
             File htmlFile = new File(this.GetName().split("\\.")[0] + ".html", htmlText, this.GetPath().split("\\.")[0] + ".html", this.GetType());
@@ -94,22 +98,59 @@ public class File {
         }
         this.text = line;
     }
-
-    public String SetProperties(String line)
-    {
-        this.properties = new HashMap<String,String>();
-        String regex = "^---\\n(((.)+: (.)*\\n)+)---$";
+    
+    public Boolean HasFrontmatter(String originalText) {
+        // text must have 3 or more characters
+        if (originalText.length() < 3)
+            return false;
+        // text must start with three dashes
+        if (!originalText.substring(0, 3).equals("---"))
+            return false;
+        // text must have three dashes on separate lines twice with some other text in between
+        String regex = "-{3}\n(.+?\n)+-{3}\n";
         Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
-        Matcher matcher = pattern.matcher(line);
-        if (matcher.find())
-        {
-            System.out.print("FIND");
-            for (String currentLine: matcher.group(1).split("\n"))
-            {
-                properties.put(currentLine.split(": ")[0], currentLine.split(": ")[1]);
-            }
-            line = matcher.replaceFirst("");
+        Matcher matcher = pattern.matcher(originalText);
+        if (!matcher.find())
+            return false;
+        // if all is checked
+        return true;
+    }
+
+    public String ExtractFrontmatter(String originalText) {
+        String regex = "-{3}\n(.+?\n)+-{3}\n";
+        Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
+        Matcher matcher = pattern.matcher(originalText);
+        matcher.find();
+        String frontmatter = matcher.group();
+        return frontmatter;
+    }
+
+    public String RemoveFrontmatter(String originalText) {
+        String regex = "-{3}\n(.+?\n)+-{3}\n";
+        Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
+        Matcher matcher = pattern.matcher(originalText);
+        matcher.find();
+        String alteredText = matcher.replaceFirst("");
+        return alteredText;
+    }
+
+    public HashMap<String, String> ExtractProperties(String frontmatter) {
+        HashMap<String, String> properties = new HashMap<>();
+        // pealing away three dashes in the begining and end
+        if (frontmatter.startsWith("---"))
+            frontmatter = frontmatter.substring(3);
+        if (frontmatter.endsWith("---"))
+            frontmatter = frontmatter.substring(0, frontmatter.length()-3);
+        // extracting properties
+        String regex = "^(.+): (.+)$";
+        Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
+        Matcher matcher = pattern.matcher(frontmatter);
+        while (matcher.find()) {
+            String prop = matcher.group();
+            String key = prop.split(": ")[0];
+            String value = prop.split(": ")[1];
+            properties.put(key, value);
         }
-        return line;
+        return properties;
     }
 }

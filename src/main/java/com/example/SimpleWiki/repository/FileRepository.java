@@ -29,9 +29,9 @@ public class FileRepository {
         return this.currentFiles;
     }
 
-    public void SetCurrentFolder(String currentFolder) 
+    public void SetCurrentFolder(String folder) 
     {
-        this.currentFolderPath = currentFolder;
+        this.currentFolderPath = folder;
     }
 
     public void SetAllFiles(List<File> allFiles) 
@@ -71,7 +71,8 @@ public class FileRepository {
 
     public void AddFile(String fileName, String fileText, String fileType, String filePath)
     {
-        this.allFiles.add(new File(fileName, fileText, filePath, fileType));
+        File file = new File(fileName, fileText, filePath, fileType);
+        this.allFiles.add(file);
     }
 
     public void AddFile(File file)
@@ -90,7 +91,7 @@ public class FileRepository {
         }
     }
 
-    public void SetClearRepository() {
+    private void SetClearRepository() {
         this.allFiles = new ArrayList<File>();
         this.currentFolderPath = "/";
         this.folderPath = "/";
@@ -113,6 +114,11 @@ public class FileRepository {
         for (File fileMd: mdRepository.GetAllFiles()) 
         {
             this.AddFile(fileMd.FileToHtml());
+            for (Map.Entry<String, String> property : fileMd.GetProperties().entrySet()) {
+                // log to console properties that were found, good for testing
+                String log = String.format("File %s has property %s: %s", fileMd.GetName(), property.getKey(), property.getValue());
+                System.out.println(log);
+            }
         }
         this.currentFolderPath = this.folderPath;
         this.SetCurrentFiles();
