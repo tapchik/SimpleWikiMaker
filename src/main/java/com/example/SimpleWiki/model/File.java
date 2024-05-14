@@ -64,8 +64,7 @@ public class File {
             HtmlRenderer renderer = HtmlRenderer.builder(options).build();
 
             // You can re-use parser and renderer instances
-            SetProperties();
-            System.out.println(this.text);
+            this.SetProperties();
             Node document = parser.parse(this.text);
             String htmlText = renderer.render(document);  // "<p>This is <em>Sparta</em></p>\n" 
             File htmlFile = new File(this.GetName().split("\\.")[0] + ".html", htmlText, this.GetPath().split("\\.")[0] + ".html", this.GetType());
