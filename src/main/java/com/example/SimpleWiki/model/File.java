@@ -79,7 +79,7 @@ public class File {
             {
                 String line = currentLine.substring(1, currentLine.length()-1);
                 System.out.println(line);
-                queryProps.put(line.split(":")[0], line.split(":").length == 1 ? "" : line.split(regex)[1]);
+                queryProps.put(line.split(":")[0], line.split(":").length == 1 ? "" : line.split(":")[1]);
             }
             for (String keyPath: props.keySet())
             {
