@@ -78,7 +78,8 @@ public class File {
             for (String currentLine: matcher.group(1).split("\n"))
             {
                 String line = currentLine.substring(1, currentLine.length()-1);
-                queryProps.put(line.split(":")[0], line.split(":")[1]);
+                System.out.println(line);
+                queryProps.put(line.split(":")[0], line.split(":").length == 1 ? "" : line.split(regex)[1]);
             }
             for (String keyPath: props.keySet())
             {
@@ -129,14 +130,14 @@ public class File {
     public HashMap<String, String> FindProperties()
     {
         HashMap<String, String> properties = new HashMap<String,String>();
-        String regex = "^---\\n(((([^\\[\\]\\n])+): ([^\\[\\]\\n])*\\n)+)---$";
+        String regex = "^---\\n(((([^\\[\\]\\n])+):([^\\[\\]\\n])*\\n)+)---$";
         Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
         Matcher matcher = pattern.matcher(this.text);
         if (matcher.find())
         {
             for (String currentLine: matcher.group(1).split("\n"))
             {
-                properties.put(currentLine.split(": ")[0], currentLine.split(": ")[1]);
+                properties.put(currentLine.split(": ")[0], currentLine.split(": ").length == 1 ? "" : currentLine.split(": ")[1]);
             }
             this.text = matcher.replaceFirst("");
             return properties;

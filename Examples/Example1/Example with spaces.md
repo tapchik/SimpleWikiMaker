@@ -1,3 +1,3 @@
 ```query
-[Type:Markdown]
+[Type:]
 ```
