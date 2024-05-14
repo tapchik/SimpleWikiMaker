@@ -64,9 +64,10 @@ public class File {
             HtmlRenderer renderer = HtmlRenderer.builder(options).build();
 
             // You can re-use parser and renderer instances
-            this.SetProperties();
-            Node document = parser.parse(this.text);
-            String htmlText = renderer.render(document);  // "<p>This is <em>Sparta</em></p>\n" 
+            String htmlText = this.text;
+            htmlText = SetProperties(htmlText);
+            Node document = parser.parse(htmlText);
+            htmlText = renderer.render(document);  // "<p>This is <em>Sparta</em></p>\n" 
             File htmlFile = new File(this.GetName().split("\\.")[0] + ".html", htmlText, this.GetPath().split("\\.")[0] + ".html", this.GetType());
             htmlFile.AddLinks();
             return htmlFile;
@@ -78,9 +79,8 @@ public class File {
     {
         String regex = "\\[\\[([^\\[\\]\\n]+)\\]\\]";
         Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
-        String line = this.GetText();
+        String line = this.text;
         Matcher matcher = pattern.matcher(line);
-        
         while (matcher.find())
         {
             if (!matcher.group(1).trim().equals(""))
@@ -95,19 +95,21 @@ public class File {
         this.text = line;
     }
 
-    public void SetProperties()
+    public String SetProperties(String line)
     {
         this.properties = new HashMap<String,String>();
         String regex = "^---\\n(((.)+: (.)*\\n)+)---$";
         Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
-        Matcher matcher = pattern.matcher(this.text);
+        Matcher matcher = pattern.matcher(line);
         if (matcher.find())
         {
-            for (String line: matcher.group(1).split("\n"))
+            System.out.print("FIND");
+            for (String currentLine: matcher.group(1).split("\n"))
             {
-                properties.put(line.split(": ")[0], line.split(": ")[1]);
+                properties.put(currentLine.split(": ")[0], currentLine.split(": ")[1]);
             }
-            this.text = matcher.replaceFirst("");
+            line = matcher.replaceFirst("");
         }
+        return line;
     }
 }
