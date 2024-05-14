@@ -8,6 +8,7 @@ public class FileRepository {
     private String folderPath;
     private List<File> allFiles;
     private List<File> currentFiles;
+    private HashMap<String, HashMap<String, String>> filesPropertys;
 
     public FileRepository()
     {
@@ -109,10 +110,29 @@ public class FileRepository {
         this.SetCurrentFiles();
     }
 
-    public void SetHtmlRepositoryByMd(FileRepository mdRepository, Map<String, Boolean> siteSettings) {
+    public void SetHtmlRepositoryByMd(FileRepository mdRepository) {
+        this.filesPropertys = new HashMap<String, HashMap<String,String>>();
         for (File fileMd: mdRepository.GetAllFiles()) 
         {
-            this.AddFile(fileMd.FileToHtml());
+            if (fileMd.GetType().equals("file"))
+            {
+                File htmlFile = new File(fileMd.GetName().split("\\.")[0] + ".html", fileMd.GetText(), fileMd.GetPath().split("\\.")[0] + ".html", "file");
+                HashMap<String,String> props = htmlFile.FindProperties();
+                if (props!=null)
+                    this.filesPropertys.put(htmlFile.GetPath(), props);
+                this.AddFile(htmlFile);
+            }
+            else
+            {
+                this.AddFile(fileMd);
+            }
+        }
+        for (File htmlFile: this.GetAllFiles())
+        {
+            if (htmlFile.GetType().equals("file"))
+            {
+                htmlFile.SetText(htmlFile.MdTextToHtml(this.filesPropertys));
+            }
         }
         this.currentFolderPath = this.folderPath;
         this.SetCurrentFiles();

@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Definition.md",
+                "file": "Help.md",
                 "mode": "source",
                 "source": false
               }
@@ -85,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Definition.md",
+                "file": "Help.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Definition.md",
+                "file": "Help.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Definition.md"
+                "file": "Help.md"
               }
             }
           }
@@ -150,6 +150,8 @@
   "lastOpenFiles": [
     "Advantages.md",
     "Definition.md",
+    "Example with spaces.md",
+    "Help.md",
     "Example/Example1.md",
     "Example/Ex1/Ex1.md"
   ]

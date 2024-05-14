@@ -1,0 +1,3 @@
+```query
+[Type:Markdown]
+```

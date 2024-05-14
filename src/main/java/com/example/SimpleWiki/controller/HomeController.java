@@ -106,7 +106,7 @@ public class HomeController {
     {
         SetClearSiteSettings();
         htmlRepository = new FileRepository();
-        htmlRepository.SetHtmlRepositoryByMd(mdRepository, siteSettings);
+        htmlRepository.SetHtmlRepositoryByMd(mdRepository);
         model.addAttribute("showHtmlBackButton", true);
         model.addAttribute("currentHtmlFiles", htmlRepository.GetCurrentFiles());
         return "fragments/listOfHtmlFiles";

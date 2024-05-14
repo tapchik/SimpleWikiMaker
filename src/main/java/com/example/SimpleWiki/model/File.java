@@ -2,8 +2,7 @@ package com.example.SimpleWiki.model;
 
 import com.vladsch.flexmark.util.ast.Node;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashMap;   
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,7 +16,6 @@ public class File {
     private String text;
     private String path;
     private String type;
-    private Map<String, String> properties;
 
     public String GetName() {
         return name;
@@ -35,9 +33,8 @@ public class File {
         return type;
     }
 
-    public Map<String, String> GetProperties()
-    {
-        return properties;
+    public void SetText(String text) {
+        this.text = text;
     }
 
     public File(String name, String text, String path, String type)
@@ -48,68 +45,102 @@ public class File {
         this.type = type;
     }
 
-    public File FileToHtml()
+    public String MdTextToHtml(HashMap<String, HashMap<String,String>> props)
     {
-        if (this.GetType().equals("file"))
-        {
-            MutableDataSet options = new MutableDataSet();
+        MutableDataSet options = new MutableDataSet();
 
-            // uncomment to set optional extensions
-            //options.set(Parser.EXTENSIONS, Arrays.asList(TablesExtension.create(), StrikethroughExtension.create()));
+        // uncomment to set optional extensions
+        //options.set(Parser.EXTENSIONS, Arrays.asList(TablesExtension.create(), StrikethroughExtension.create()));
 
-            // uncomment to convert soft-breaks to hard breaks
-            options.set(HtmlRenderer.SOFT_BREAK, "<br />\n");
+        // uncomment to convert soft-breaks to hard breaks
+        options.set(HtmlRenderer.SOFT_BREAK, "<br />\n");
 
-            Parser parser = Parser.builder(options).build();
-            HtmlRenderer renderer = HtmlRenderer.builder(options).build();
+        Parser parser = Parser.builder(options).build();
+        HtmlRenderer renderer = HtmlRenderer.builder(options).build();
 
-            // You can re-use parser and renderer instances
-            String htmlText = this.text;
-            htmlText = SetProperties(htmlText);
-            Node document = parser.parse(htmlText);
-            htmlText = renderer.render(document);  // "<p>This is <em>Sparta</em></p>\n" 
-            File htmlFile = new File(this.GetName().split("\\.")[0] + ".html", htmlText, this.GetPath().split("\\.")[0] + ".html", this.GetType());
-            htmlFile.AddLinks();
-            return htmlFile;
-        }
-        return this;
+        // You can re-use parser and renderer instances
+        String htmlText = this.text;
+        htmlText = AddQuery(htmlText, props);
+        Node document = parser.parse(htmlText);
+        htmlText = renderer.render(document);  // "<p>This is <em>Sparta</em></p>\n" 
+        htmlText = AddLinks(htmlText);
+        return htmlText;
     }
 
-    public void AddLinks()
+    private String AddQuery(String htmlText, HashMap<String, HashMap<String, String>> props) {
+        HashMap<String, String> queryProps = new HashMap<String, String>();
+        String regex = "^```query\\n((\\[([^\\[\\]\\n])+:([^\\[\\]\\n])*\\]\\n)+)```$";
+        Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
+        Matcher matcher = pattern.matcher(htmlText);
+        while (matcher.find())
+        {
+            String replacement = "";
+            for (String currentLine: matcher.group(1).split("\n"))
+            {
+                String line = currentLine.substring(1, currentLine.length()-1);
+                queryProps.put(line.split(":")[0], line.split(":")[1]);
+            }
+            for (String keyPath: props.keySet())
+            {
+                Boolean add = true;
+                for (String queryKeyProp: queryProps.keySet())
+                {
+                    if (props.get(keyPath).containsKey(queryKeyProp))
+                    {
+                        if (!props.get(keyPath).get(queryKeyProp).equals(queryProps.get(queryKeyProp)))
+                        {
+                            add = false;
+                        }
+                    }
+                    else
+                    {
+                        add = false;
+                    }
+                }
+                if (add)
+                {
+                    replacement += "<a href=/p" + keyPath.split("\\.")[0] + ">" + keyPath.split("\\.")[0] + "</a>\n";
+                }
+            }
+            htmlText = matcher.replaceFirst(replacement);
+        }
+        return htmlText;
+    }
+
+    public String AddLinks(String htmlText)
     {
         String regex = "\\[\\[([^\\[\\]\\n]+)\\]\\]";
         Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
-        String line = this.text;
-        Matcher matcher = pattern.matcher(line);
+        Matcher matcher = pattern.matcher(htmlText);
         while (matcher.find())
         {
             if (!matcher.group(1).trim().equals(""))
             {
-                line = matcher.replaceFirst(match -> MessageFormat.format("<a href={0}>{1}</a>", 
+                htmlText = matcher.replaceFirst(match -> MessageFormat.format("<a href={0}>{1}</a>", 
                 "/p/"+ (match.group(1).indexOf("|") != -1 ? match.group(1).split("\\|")[0].replaceAll(" ", "%20") 
                 : match.group(1).replaceAll(" ", "%20")), 
                 (match.group(1).indexOf("|") != -1 ? match.group(1).split("\\|")[1] : match.group(1))));
-                matcher = pattern.matcher(line);
+                matcher = pattern.matcher(htmlText);
             }
         }
-        this.text = line;
+        return htmlText;
     }
 
-    public String SetProperties(String line)
+    public HashMap<String, String> FindProperties()
     {
-        this.properties = new HashMap<String,String>();
-        String regex = "^---\\n(((.)+: (.)*\\n)+)---$";
+        HashMap<String, String> properties = new HashMap<String,String>();
+        String regex = "^---\\n(((([^\\[\\]\\n])+): ([^\\[\\]\\n])*\\n)+)---$";
         Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
-        Matcher matcher = pattern.matcher(line);
+        Matcher matcher = pattern.matcher(this.text);
         if (matcher.find())
         {
-            System.out.print("FIND");
             for (String currentLine: matcher.group(1).split("\n"))
             {
                 properties.put(currentLine.split(": ")[0], currentLine.split(": ")[1]);
             }
-            line = matcher.replaceFirst("");
+            this.text = matcher.replaceFirst("");
+            return properties;
         }
-        return line;
+        return null;
     }
 }
