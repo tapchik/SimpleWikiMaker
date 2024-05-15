@@ -67,6 +67,70 @@ public class File {
         return htmlText;
     }
 
+    public Boolean HasFrontmatter() {
+        // text must have 3 or more characters
+        if (this.text.length() < 3)
+            return false;
+        // text must start with three dashes
+        if (!this.text.substring(0, 3).equals("---"))
+            return false;
+        // text must have three dashes on separate lines twice with some other text in between
+        String regex = "-{3}\n(.+?\n)+-{3}\n";
+        Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
+        Matcher matcher = pattern.matcher(this.text);
+        if (!matcher.find())
+            return false;
+        // if all is checked, then yes, this.text has a frontmatter
+        return true;
+    }
+
+    public String ExtractFrontmatter() {
+        // coppies out frontmatter from this.text
+        String regex = "-{3}\n(.+?\n)+-{3}\n";
+        Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
+        Matcher matcher = pattern.matcher(this.text);
+        matcher.find();
+        String frontmatter = matcher.group();
+        return frontmatter;
+    }
+
+    public void RemoveFrontmatter() {
+        // attempts to remove frontmatter from this.text
+        String regex = "-{3}\n(.+?\n)+-{3}\n";
+        Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
+        Matcher matcher = pattern.matcher(this.text);
+        matcher.find();
+        this.text = matcher.replaceFirst("");
+    }
+
+    public HashMap<String, String> ExtractProperties(String frontmatter) {
+        // atempts to extract properties from this.text
+        HashMap<String, String> properties = new HashMap<>();
+        // pealing away three dashes in the begining and end
+        if (frontmatter.startsWith("---"))
+            frontmatter = frontmatter.substring(3);
+        if (frontmatter.endsWith("---"))
+            frontmatter = frontmatter.substring(0, frontmatter.length()-3);
+        // extracting properties
+        String regex = "^(.+): (.+)$";
+        Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
+        Matcher matcher = pattern.matcher(frontmatter);
+        int count = 0;
+        while (matcher.find()) {
+            String prop = matcher.group();
+            String key = prop.split(": ")[0];
+            String value = prop.split(": ")[1];
+            properties.put(key, value);
+            count++;
+            // logging found properies, good for testing
+            String log = String.format("File %s has property, %s: %s", this.name, key, value);
+            System.out.println(log);
+        }
+        if (count==0 && !HasFrontmatter())
+            System.out.println(String.format("File %s has no properties", this.name));
+        return properties;
+    }
+
     private String AddQuery(String htmlText, HashMap<String, HashMap<String, String>> props) {
         HashMap<String, String> queryProps = new HashMap<String, String>();
         String regex = "^```query\\n((\\[([^\\[\\]\\n])+:([^\\[\\]\\n])*\\]\\n)+)```$";
@@ -126,23 +190,5 @@ public class File {
             }
         }
         return htmlText;
-    }
-
-    public HashMap<String, String> FindProperties()
-    {
-        HashMap<String, String> properties = new HashMap<String,String>();
-        String regex = "^---\\n(((([^\\[\\]\\n])+):([^\\[\\]\\n])*\\n)+)---$";
-        Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
-        Matcher matcher = pattern.matcher(this.text);
-        if (matcher.find())
-        {
-            for (String currentLine: matcher.group(1).split("\n"))
-            {
-                properties.put(currentLine.split(": ")[0], currentLine.split(": ").length == 1 ? "" : currentLine.split(": ")[1]);
-            }
-            this.text = matcher.replaceFirst("");
-            return properties;
-        }
-        return null;
     }
 }
