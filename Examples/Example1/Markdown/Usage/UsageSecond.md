@@ -1,4 +1,8 @@
+---
+Kind: Usage
+---
 # UsageSecond
+
 ## Выделение текста
 *Курсивный текст* или _курсивный текст_. 
 **Полужирный текст** или __полужирный текст__. 
@@ -17,9 +21,8 @@
 3. Третий
 ***
 Полезные ссылки:
-[[Advantages]]
-[[Help]]
-[[Definition]]
-[[Example/Ex1/Ex1]]
+[[Markdown/Advantages]]
+[[Markdown/Syntax]]
+[[Markdown/Definition]]
 
 

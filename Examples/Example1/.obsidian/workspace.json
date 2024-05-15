@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Example with spaces.md",
+                "file": "Markdown/UsageList.md",
                 "mode": "source",
                 "source": false
               }
@@ -85,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Example with spaces.md",
+                "file": "Markdown/UsageList.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Example with spaces.md",
+                "file": "Markdown/UsageList.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Example with spaces.md"
+                "file": "Markdown/UsageList.md"
               }
             }
           }
@@ -148,11 +148,30 @@
   },
   "active": "2bdb1157ddb76e13",
   "lastOpenFiles": [
-    "Definition.md",
-    "Example with spaces.md",
+    "Markdown/Syntax.md",
+    "Markdown/Advantages.md",
+    "Markdown/Definition.md",
+    "Markdown/Usage/UsageThird.md",
+    "Markdown/Usage/UsageSecond.md",
+    "Markdown/Usage/UsageFirst.md",
+    "Markdown",
+    "Markdown/UsageList.md",
+    "Usage/MoreUsage/UsageThird.md",
+    "Usage/MoreUsage/UsageSecond.md",
+    "Usage/MoreUsage/UsageFirst.md",
+    "Usage/MoreUsage",
+    "Usage/UsageList.md",
+    "Markdown/Usage",
     "Help.md",
-    "Advantages.md",
+    "Example/Ex1/Ex1.md",
     "Example/Example1.md",
-    "Example/Ex1/Ex1.md"
+    "Example/Ex1",
+    "Example",
+    "Example with spaces.md",
+    "Markdown/Usage",
+    "Markdown",
+    "theme.css",
+    "settings.txt",
+    "My solution"
   ]
 }

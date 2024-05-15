@@ -1,3 +1,0 @@
-# Example1
-***
-[[Help]]

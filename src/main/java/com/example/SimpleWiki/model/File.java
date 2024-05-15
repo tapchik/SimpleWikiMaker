@@ -104,6 +104,7 @@ public class File {
                 }
             }
             htmlText = matcher.replaceFirst(replacement);
+            matcher = pattern.matcher(htmlText);
         }
         return htmlText;
     }
