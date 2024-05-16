@@ -112,14 +112,19 @@ public class FileRepository {
 
     public void SetHtmlRepositoryByMd(FileRepository mdRepository) {
         this.filesPropertys = new HashMap<String, HashMap<String,String>>();
+        System.out.println("Degub stage: Extracting properties");
         for (File fileMd: mdRepository.GetAllFiles()) 
         {
             if (fileMd.GetType().equals("file"))
             {
                 File htmlFile = new File(fileMd.GetName().split("\\.")[0] + ".html", fileMd.GetText(), fileMd.GetPath().split("\\.")[0] + ".html", "file");
-                HashMap<String,String> props = htmlFile.FindProperties();
-                if (props!=null)
-                    this.filesPropertys.put(htmlFile.GetPath(), props);
+                String frontmatter = "";
+                if (htmlFile.HasFrontmatter()) {
+                    frontmatter = htmlFile.ExtractFrontmatter();
+                    htmlFile.RemoveFrontmatter();
+                }
+                HashMap<String, String> props = htmlFile.ExtractProperties(frontmatter);
+                this.filesPropertys.put(htmlFile.GetPath(), props);
                 this.AddFile(htmlFile);
             }
             else
