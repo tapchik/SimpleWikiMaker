@@ -66,7 +66,7 @@ public class FileRepository {
     }
 
     public String GetPathByName(String name) {
-        return "/p" + this.GetCurrentFolderPath() + (this.GetCurrentFolderPath().equals("/") ? "" :
+        return "/f" + this.GetCurrentFolderPath() + (this.GetCurrentFolderPath().equals("/") ? "" :
         "/") + name.split("\\.")[0];
     }
 

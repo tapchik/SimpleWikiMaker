@@ -18,17 +18,22 @@
         <h3>Build your site</h3>
     </div>
     <div class="flex-container">
-        <div class="fileManagerDiv">
-            <div th:insert="~{fragments/mdMenu.html :: nav}"></div>
-            <div class="files" th:insert="~{fragments/listOfMdFiles.html :: div}" id="mdFiles"></div>
+        <div>
+            <div class="fileManagerDiv">
+                <div th:insert="~{fragments/mdMenu.html :: nav}"></div>
+                <div class="files" th:insert="~{fragments/listOfMdFiles.html :: div}" id="mdFiles"></div>
+            </div>
+            <div class="settingsDiv">
+                <div class="settings" th:insert="~{fragments/settings.html :: div}"></div>
+            </div>
+            <div class="fileManagerDiv">
+                <div th:insert="~{fragments/htmlMenu.html :: nav}"></div>
+                <div class="files" th:insert="~{fragments/listOfHtmlFiles.html :: div}" id="htmlFiles"></div>
+            </div>
         </div>
-        <div class="settingsDiv">
-            <div th:insert="~{fragments/settingsMenu.html :: nav}"></div>
-            <div class="settings" th:insert="~{fragments/settings.html :: div}"></div>
-        </div>
-        <div class="fileManagerDiv">
-            <div th:insert="~{fragments/htmlMenu.html :: nav}"></div>
-            <div class="files" th:insert="~{fragments/listOfHtmlFiles.html :: div}" id="htmlFiles"></div>
+        <div style="width: 770px;">
+            <div th:insert="~{fragments/settingsMenu.html}"></div>
+            <div id="previewDiv" th:insert="~{fragments/pageFrame.html :: iframe}"></div>
         </div>
     </div>
     <script th:src="@{/js/readFilesFromFolder.js}" type="text/javascript"> </script>

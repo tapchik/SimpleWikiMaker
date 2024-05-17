@@ -143,6 +143,13 @@ public class HomeController {
         settingsRepository.SetAllFiles(settingFiles);
     }
 
+    @RequestMapping(value = "/f/**")
+    public String GetHtmlPageFrame(HttpServletRequest request, Model model) {
+        String restOfTheUrl = new AntPathMatcher().extractPathWithinPattern(request.getAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE).toString(),request.getRequestURI());
+        model.addAttribute("path", "/p/"+restOfTheUrl);
+        return "fragments/pageFrame";
+    }
+
     @RequestMapping(value = "/p/**")
     public String GetHtmlPage(HttpServletRequest request, Model model) {
         String restOfTheUrl = new AntPathMatcher().extractPathWithinPattern(request.getAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE).toString(),request.getRequestURI());

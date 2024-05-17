@@ -11,7 +11,7 @@
         <div th:case="markdown">
             <div th:switch="${type}">
                 <button th:case="dir" id="mdDirButton" th:text="${name}" th:value="${name}"></button>
-                <button th:case="*" id="mdFileButton" th:text="${name}" th:value="${name}"></button>
+                <button th:case="*" id="mdFileButton" th:text="${name}"></button>
             </div>
         </div>
         <div th:case="*">

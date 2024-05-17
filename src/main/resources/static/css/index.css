@@ -8,16 +8,22 @@
 {width: 410px; height: 230px; border: 1px solid black; overflow: auto; padding-left: 10px; padding-top: 10px;}
 
 .settings
-{width: 320px; height: 230px; overflow: auto; display: flex; align-items: center; justify-content: center; }
+{width: 410px; height: 100px; overflow: auto; display: flex; align-items: center; justify-content: center; }
 
 .settingsDiv
-{width: 320px; height: 200px; max-height: 300px; margin: 0 10px; }
+{width: 410px; height: 100px; max-height: 300px; }
+
+.previewDiv
+{width: 770px; height: 630px;}
 
 #mdFileButton, #mdDirButton, #htmlFileButton, #htmlDirButton
 {background:none; border:none; }
 
-#mdFileButton:hover, #mdDirButton:hover, #htmlFileButton:hover, #htmlDirButton:hover
+#mdDirButton:hover, #htmlFileButton:hover, #htmlDirButton:hover
 {color: #0000FF; }
+
+#mdFileButton
+{pointer-events: none;}
 
 .divHeader
 { margin: 40px; display:flex; align-items: center; justify-content: center; }
