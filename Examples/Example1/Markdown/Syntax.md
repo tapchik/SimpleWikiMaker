@@ -123,9 +123,6 @@ emoji: ⛺  😂‚
 <h2> H2 header </h2>
 <p> # This markdown inside "p" tag should stay intact </p>
 
-**The first YouTube video "Me at the zoo". Embedded as an iframe**
-<iframe style="width:560px; max-width:100%; height:315px" src="https://www.youtube.com/embed/jNQXAC9IVRw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
 ***
 Преимущества: [[Markdown/Advantages]]
 Синтаксис: [[Markdown/Syntax]]

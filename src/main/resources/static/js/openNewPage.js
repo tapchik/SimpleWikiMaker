@@ -12,7 +12,7 @@ $('body').on('click', '#htmlFileButton', function() {
                 type: "GET",
                 url: path,
                 success:function(result) {
-                    $("#previewDiv").html(result);
+                    $("#frameDiv").html(result);
                     console.log("Preview fill"); 
                 },
             }); 

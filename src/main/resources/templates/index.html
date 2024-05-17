@@ -14,26 +14,26 @@
 </head>
 <body>
     <div th:insert="~{fragments/mainMenu.html}"></div>
-    <div class="divHeader">
+    <div class="headerDiv">
         <h3>Build your site</h3>
     </div>
-    <div class="flex-container">
+    <div class="siteBuilderDiv">
         <div>
             <div class="fileManagerDiv">
                 <div th:insert="~{fragments/mdMenu.html :: nav}"></div>
-                <div class="files" th:insert="~{fragments/listOfMdFiles.html :: div}" id="mdFiles"></div>
+                <div id="mdFiles" th:insert="~{fragments/listOfMdFiles.html :: div}"></div>
             </div>
             <div class="settingsDiv">
                 <div class="settings" th:insert="~{fragments/settings.html :: div}"></div>
             </div>
             <div class="fileManagerDiv">
                 <div th:insert="~{fragments/htmlMenu.html :: nav}"></div>
-                <div class="files" th:insert="~{fragments/listOfHtmlFiles.html :: div}" id="htmlFiles"></div>
+                <div id="htmlFiles" th:insert="~{fragments/listOfHtmlFiles.html :: div}"></div>
             </div>
         </div>
-        <div style="width: 770px;">
+        <div class="previewDiv">
             <div th:insert="~{fragments/settingsMenu.html}"></div>
-            <div id="previewDiv" th:insert="~{fragments/pageFrame.html :: iframe}"></div>
+            <div id="frameDiv" th:insert="~{fragments/pageFrame.html :: iframe}"></div>
         </div>
     </div>
     <script th:src="@{/js/readFilesFromFolder.js}" type="text/javascript"> </script>

@@ -1,8 +1,5 @@
 package com.example.SimpleWiki.controller;
-
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,27 +20,13 @@ import jakarta.servlet.http.HttpServletRequest;
 public class HomeController {
     FileRepository mdRepository;
     FileRepository htmlRepository;
-
     FileRepository settingsRepository;
-
-    Map<String, Boolean> siteSettings;
-
 
     public HomeController()
     {
         mdRepository = new FileRepository();
         htmlRepository = new FileRepository();
         settingsRepository = new FileRepository();
-        SetClearSiteSettings();
-    }
-
-    public void SetClearSiteSettings()
-    {
-        siteSettings = new HashMap<String, Boolean>();
-        siteSettings.put("mainPage", false);
-        siteSettings.put("welcomePage", false);
-        siteSettings.put("navigation", false);
-        siteSettings.put("contactsBlock", false);
     }
 
     @RequestMapping("/")
@@ -104,7 +87,6 @@ public class HomeController {
     @RequestMapping("/convertRepoToHtml")
     public String ConvertMdFilesToHtml(Model model) 
     {
-        SetClearSiteSettings();
         htmlRepository = new FileRepository();
         htmlRepository.SetHtmlRepositoryByMd(mdRepository);
         model.addAttribute("showHtmlBackButton", true);

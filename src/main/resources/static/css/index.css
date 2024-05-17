@@ -1,10 +1,13 @@
+.siteBuilderDiv 
+{display: flex; justify-content: center; }
+
+.headerDiv
+{ margin: 40px; display:flex; align-items: center; justify-content: center; }
+
 .fileManagerDiv
 {width: 410px; height: 300px; max-height: 300px; margin: 0 10px; }
 
-.flex-container 
-{display: flex; justify-content: center; }
-
-.files
+#mdFiles, #htmlFiles
 {width: 410px; height: 230px; border: 1px solid black; overflow: auto; padding-left: 10px; padding-top: 10px;}
 
 .settings
@@ -13,8 +16,11 @@
 .settingsDiv
 {width: 410px; height: 100px; max-height: 300px; }
 
-.previewDiv
+#frameDiv
 {width: 770px; height: 630px;}
+
+.previewDiv
+{width: 900px;}
 
 #mdFileButton, #mdDirButton, #htmlFileButton, #htmlDirButton
 {background:none; border:none; }
@@ -24,9 +30,6 @@
 
 #mdFileButton
 {pointer-events: none;}
-
-.divHeader
-{ margin: 40px; display:flex; align-items: center; justify-content: center; }
 
 svg 
 { width: 24px; height: 24px; }
