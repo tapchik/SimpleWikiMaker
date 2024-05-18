@@ -8,4 +8,5 @@ Type: Markdown information
 3. Исходный текст материала должен оставаться читаемым даже без преобразования в веб-страницу.
 ***
 Определение: [[Markdown/Definition]]
-Синтаксис: [[Markdown/Syntax| See help ]]
+Возможности: [[Markdown/Possibilities| See help ]]
+Примеры использования: [[Markdown/UsageList]]

@@ -22,7 +22,7 @@ Kind: Usage
 ***
 Полезные ссылки:
 [[Markdown/Advantages]]
-[[Markdown/Syntax]]
+[[Possibilities]]
 [[Markdown/Definition]]
 
 

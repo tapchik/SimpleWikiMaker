@@ -1,7 +1,7 @@
 ---
 Type: Markdown information
 ---
-# Syntax
+# Possibilities
 
 ## 1. Headers
 
@@ -73,13 +73,8 @@ print({"a":0})
 
 ~~strikethrough~~
 
-==highlighted==
-
 `one line code`
 
-A~subscript~
-
-A^superscript^
 ## 7. Media
 
 image: 
@@ -116,14 +111,11 @@ emoji: ⛺  😂‚
 
 ---
 
----
-
----
 ## 10. html
 <h2> H2 header </h2>
 <p> # This markdown inside "p" tag should stay intact </p>
 
 ***
 Преимущества: [[Markdown/Advantages]]
-Синтаксис: [[Markdown/Syntax]]
 Определение: [[Markdown/Definition]]
+Примеры использования: [[Markdown/UsageList]]
