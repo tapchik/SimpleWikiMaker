@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Markdown/Usage/UsageSecond.md",
+                "file": "Markdown/Advantages.md",
                 "mode": "source",
                 "source": false
               }
@@ -85,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Markdown/Usage/UsageSecond.md",
+                "file": "Markdown/Advantages.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Markdown/Usage/UsageSecond.md",
+                "file": "Markdown/Advantages.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Markdown/Usage/UsageSecond.md"
+                "file": "Markdown/Advantages.md"
               }
             }
           }
@@ -148,12 +148,12 @@
   },
   "active": "2bdb1157ddb76e13",
   "lastOpenFiles": [
-    "Markdown/Usage/UsageFirst.md",
-    "Markdown/Usage/UsageSecond.md",
-    "Markdown/Usage/UsageThird.md",
-    "Markdown/Definition.md",
-    "Markdown/Advantages.md",
     "Markdown/UsageList.md",
+    "Markdown/Advantages.md",
+    "Markdown/Definition.md",
+    "Markdown/Usage/UsageSecond.md",
+    "Markdown/Usage/UsageFirst.md",
+    "Markdown/Usage/UsageThird.md",
     "Markdown/Possibilities.md",
     "Markdown",
     "Usage/MoreUsage/UsageThird.md",

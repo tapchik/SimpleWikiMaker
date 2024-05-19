@@ -4,8 +4,19 @@
         <meta charset="utf-8" />
         <title th:utext="${title}"></title>
         <style th:utext="${styles}"></style>
+        <!--<link th:href="@{/css/page.css}" rel="stylesheet" />!-->
     </head>
     <body>
-        <div th:utext="${tags}"></div>
+        <div th:utext="${navigationTags}"></div>
+        <!--<nav class="navbar">
+            <ul class="nav-list">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About Us</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+        <hr>!-->
+        <div id="mainTagsDiv" th:utext="${mainTags}"></div>
     </body>
 </html>

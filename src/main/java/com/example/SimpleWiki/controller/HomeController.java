@@ -132,6 +132,18 @@ public class HomeController {
         return "fragments/pageFrame";
     }
 
+    @RequestMapping(value = "/defaultPageFrame")
+    public String GetDefaultHtmlPageFrame(Model model) {
+        model.addAttribute("path", "/defaultPage");
+        return "fragments/pageFrame";
+    }
+
+    @RequestMapping(value = "/defaultPage")
+    public String GetDefaultHtmlPage(Model model) {
+        model.addAttribute("mainTags", "<p class=\"text-info\">Select site content</p>");
+        return "page";
+    }
+
     @RequestMapping(value = "/p/**")
     public String GetHtmlPage(HttpServletRequest request, Model model) {
         String restOfTheUrl = new AntPathMatcher().extractPathWithinPattern(request.getAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE).toString(),request.getRequestURI());
@@ -146,7 +158,7 @@ public class HomeController {
         }
         model.addAttribute("title", title);
         model.addAttribute("styles", stylesFile);
-        model.addAttribute("tags", tags);
+        model.addAttribute("mainTags", tags);
         return "page";
     }
 }
