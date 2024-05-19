@@ -10,7 +10,6 @@ import java.util.regex.Pattern;
 import com.ibm.icu.text.MessageFormat;
 import com.vladsch.flexmark.ext.gfm.strikethrough.StrikethroughExtension;
 import com.vladsch.flexmark.ext.tables.TablesExtension;
-import com.vladsch.flexmark.ext.gfm.strikethrough.SubscriptExtension;
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.util.data.MutableDataSet;
@@ -20,6 +19,7 @@ public class File {
     private String text;
     private String path;
     private String type;
+    private HashMap<String,String> properties;
 
     public String GetName() {
         return name;
@@ -37,8 +37,16 @@ public class File {
         return type;
     }
 
+    public HashMap<String,String> GetProperties() {
+        return properties;
+    }
+
     public void SetText(String text) {
         this.text = text;
+    }
+
+    public void SetProperties(HashMap<String,String> properties) {
+        this.properties = properties;
     }
 
     public File(String name, String text, String path, String type)
@@ -51,22 +59,20 @@ public class File {
 
     public String MdTextToHtml(HashMap<String, HashMap<String,String>> props)
     {
+        //set options
         MutableDataSet options = new MutableDataSet();
-
-        // uncomment to set optional extensions
         options.set(Parser.EXTENSIONS, Arrays.asList(TablesExtension.create(), StrikethroughExtension.create()));
-
-        // uncomment to convert soft-breaks to hard breaks
         options.set(HtmlRenderer.SOFT_BREAK, "<br />\n");
 
+        //initialise parser and renderer with your options
         Parser parser = Parser.builder(options).build();
         HtmlRenderer renderer = HtmlRenderer.builder(options).build();
 
-        // You can re-use parser and renderer instances
+        //get text from markdown to html with parser and all options
         String htmlText = this.text;
         htmlText = AddQuery(htmlText, props);
         Node document = parser.parse(htmlText);
-        htmlText = renderer.render(document);  // "<p>This is <em>Sparta</em></p>\n" 
+        htmlText = renderer.render(document); 
         htmlText = AddLinks(htmlText);
         return htmlText;
     }
@@ -107,7 +113,7 @@ public class File {
         this.text = matcher.replaceFirst("");
     }
 
-    public HashMap<String, String> ExtractProperties(String frontmatter) {
+    public void SetExtractedProperties(String frontmatter) {
         // atempts to extract properties from this.text
         HashMap<String, String> properties = new HashMap<>();
         // pealing away three dashes in the begining and end
@@ -132,7 +138,7 @@ public class File {
         }
         if (count==0 && !HasFrontmatter())
             System.out.println(String.format("File %s has no properties", this.name));
-        return properties;
+        SetProperties(properties);
     }
 
     private String AddQuery(String htmlText, HashMap<String, HashMap<String, String>> props) {
@@ -142,21 +148,20 @@ public class File {
         Matcher matcher = pattern.matcher(htmlText);
         while (matcher.find())
         {
-            String replacement = "";
-            for (String currentLine: matcher.group(1).split("\n"))
+            String pageLinks = "";
+            for (String propLine: matcher.group(1).split("\n"))
             {
-                String line = currentLine.substring(1, currentLine.length()-1);
-                System.out.println(line);
+                String line = propLine.substring(1, propLine.length()-1);
                 queryProps.put(line.split(":")[0], line.split(":").length == 1 ? "" : line.split(":")[1]);
             }
-            for (String keyPath: props.keySet())
+            for (String pathKey: props.keySet())
             {
                 Boolean add = true;
-                for (String queryKeyProp: queryProps.keySet())
+                for (String queryPropKey: queryProps.keySet())
                 {
-                    if (props.get(keyPath).containsKey(queryKeyProp))
+                    if (props.get(pathKey).containsKey(queryPropKey))
                     {
-                        if (!props.get(keyPath).get(queryKeyProp).equals(queryProps.get(queryKeyProp)))
+                        if (!props.get(pathKey).get(queryPropKey).equals(queryProps.get(queryPropKey)))
                         {
                             add = false;
                         }
@@ -168,10 +173,10 @@ public class File {
                 }
                 if (add)
                 {
-                    replacement += "<a href=/p" + keyPath.split("\\.")[0] + ">" + keyPath.split("\\.")[0] + "</a>\n";
+                    pageLinks += "<a href=/p" + pathKey.split("\\.")[0] + ">" + pathKey.split("\\.")[0] + "</a>\n";
                 }
             }
-            htmlText = matcher.replaceFirst(replacement);
+            htmlText = matcher.replaceFirst(pageLinks);
             matcher = pattern.matcher(htmlText);
         }
         return htmlText;

@@ -1,4 +1,5 @@
 # UsageList
+Применение базовых возможностей языка разметки Markdown:
 
 ```query
 [Kind:Usage]
