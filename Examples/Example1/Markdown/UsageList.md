@@ -1,5 +1,5 @@
 ---
-Navigation: "1"
+Navigation: 1;Usage
 ---
 # UsageList
 Применение базовых возможностей языка разметки Markdown:

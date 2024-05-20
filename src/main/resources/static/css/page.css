@@ -24,16 +24,5 @@
 
 .nav-list li a {
     text-decoration: none;
-<<<<<<< HEAD
     transition: color 0.3s ease-in-out;
 }
-=======
-    font-size: 40px;
-    transition: color 0.3s ease-in-out;
-}
-
-#mainTagsDiv {
-    margin: 6rem auto 1rem;
-    max-width: 48rem;
-}
->>>>>>> 6d69ea3ffb11661bfc9533e523f314adf7f70e18
