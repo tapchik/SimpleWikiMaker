@@ -21,6 +21,7 @@ public class HomeController {
     FileRepository mdRepository;
     FileRepository htmlRepository;
     FileRepository settingsRepository;
+    String currentSrcPreview;
 
     public HomeController()
     {
@@ -117,6 +118,13 @@ public class HomeController {
         return htmlRepository.GetPathByName(name);
     }
 
+    @RequestMapping("/getCurrentSrcPage")
+    @ResponseBody
+    public String GetCurrentSrcPage() 
+    {
+        return currentSrcPreview;
+    }
+
     @RequestMapping("/setSettingsFiles")
     @ResponseBody
     public void SetSettingsFiles(@RequestBody List<File> settingFiles)
@@ -128,6 +136,7 @@ public class HomeController {
     @RequestMapping(value = "/f/**")
     public String GetHtmlPageFrame(HttpServletRequest request, Model model) {
         String restOfTheUrl = new AntPathMatcher().extractPathWithinPattern(request.getAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE).toString(),request.getRequestURI());
+        currentSrcPreview = "/p/"+restOfTheUrl;
         model.addAttribute("path", "/p/"+restOfTheUrl);
         return "fragments/pageFrame";
     }
@@ -135,6 +144,7 @@ public class HomeController {
     @RequestMapping(value = "/defaultPageFrame")
     public String GetDefaultHtmlPageFrame(Model model) {
         model.addAttribute("path", "/defaultPage");
+        currentSrcPreview = "/p/";
         return "fragments/pageFrame";
     }
 

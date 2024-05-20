@@ -20,6 +20,19 @@ $('body').on('click', '#htmlFileButton', function() {
     });
 });
 
+$('body').on('click', '#openOnNewPage', function() {
+    var api_path = "/getCurrentSrcPage";
+    $.ajax({
+        type: "GET",
+        url: api_path,
+        dataType: "text",
+        success:function(result) {
+            window.open(result);
+            console.log("Current page is set");
+        },
+    });
+});
+
 $('body').on('click', '#openWelcomePage', function() {
     var txt = "Welcome.html";
     var api_path = "/getHtmlPath";
