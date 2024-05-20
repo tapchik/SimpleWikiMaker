@@ -1,6 +1,3 @@
----
-Navigation: 1;Usage
----
 # UsageList
 Применение базовых возможностей языка разметки Markdown:
 
