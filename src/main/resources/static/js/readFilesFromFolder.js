@@ -117,7 +117,7 @@ $(document).ready(function() {
     console.log("Ready!");
     var api_path = "/getHtmlFolder";
     $.ajax({
-        type: "POST",
+        type: "GET",
         url: api_path,
         success:function(result) {
             $("#htmlFiles").html(result);
@@ -126,11 +126,20 @@ $(document).ready(function() {
     });
     var api_path = "/getMdFolder";
     $.ajax({
-        type: "POST",
+        type: "GET",
         url: api_path,
         success:function(result) {
             $("#mdFiles").html(result);
             console.log("MD files fill");
         },
     });
+    var api_path = "/defaultPageFrame";
+    $.ajax({
+        type: "GET",
+        url: api_path,
+        success:function(result) {
+            $("#frameDiv").html(result);
+            console.log("Preview fill"); 
+        }
+    })
 });
