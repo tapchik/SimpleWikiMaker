@@ -157,6 +157,7 @@ public class HomeController {
     @RequestMapping(value = "/p/**")
     public String GetHtmlPage(HttpServletRequest request, Model model) {
         String restOfTheUrl = new AntPathMatcher().extractPathWithinPattern(request.getAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE).toString(),request.getRequestURI());
+        currentSrcPreview = "/p/"+restOfTheUrl;
         File htmlFile = htmlRepository.GetFileByPath("/" + restOfTheUrl + ".html");
         String title = "Error";
         String stylesFile = (settingsRepository.GetFileByType("theme") == null ? "" : settingsRepository.GetFileByType("theme").GetText());
