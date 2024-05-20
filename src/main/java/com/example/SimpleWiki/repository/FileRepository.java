@@ -122,6 +122,7 @@ public class FileRepository {
                     htmlFile.RemoveFrontmatter();
                 }
                 htmlFile.SetExtractedProperties(frontmatter);
+
                 this.AddFile(htmlFile);
             }
             else
@@ -129,15 +130,62 @@ public class FileRepository {
                 this.AddFile(fileMd);
             }
         }
+        String navigationTags = GetFilesNavigation(GetFileProperties());
         for (File htmlFile: this.GetAllFiles())
         {
             if (htmlFile.GetType().equals("file"))
             {
                 htmlFile.SetText(htmlFile.MdTextToHtml(GetFileProperties()));
+                htmlFile.AddNavigation(navigationTags);
             }
         }
         this.currentFolderPath = this.folderPath;
         this.SetCurrentFiles();
+    }
+
+    public String GetFilesNavigation(HashMap<String, HashMap<String,String>> props) {
+        String navigationTags = "<nav class=\"navbar\">" + "\n"
+                                + "<ul class=\"nav-list\">" + "\n";
+        
+        HashMap<Integer, String> fileNavigationNumbers = new HashMap<>();
+        for (String pathKey: props.keySet())
+        {
+            if (!props.get(pathKey).containsKey("Navigation"))
+            {
+                continue;
+            }
+            if (props.get(pathKey).get("Navigation").equals(""))
+            {
+                continue;
+            }
+            String [] navProperty = props.get(pathKey).get("Navigation").split(";");
+            if (navProperty.length > 2)
+            {
+                continue;
+            }
+            if (!navProperty[0].matches("\\d+"))
+            {
+                continue;
+            }
+            if (navProperty.length == 2)
+            {
+                fileNavigationNumbers.put(Integer.parseInt(navProperty[0]), pathKey + "|" + navProperty[1]);
+            }
+        }
+        List<Integer> fileNavigationByKey = new ArrayList<Integer>(fileNavigationNumbers.keySet());
+        Collections.sort(fileNavigationByKey);
+        for (int i = 0; i < fileNavigationByKey.size(); i++)
+        {
+            navigationTags += "<li><a href=" + "/p" +  fileNavigationNumbers.get(fileNavigationByKey.get(i)).split("\\|")[0].split("\\.")[0] + ">" 
+            + fileNavigationNumbers.get(fileNavigationByKey.get(i)).split("\\|")[1] + "</a></li>" + "\n";
+        }
+        navigationTags += "</ul>" + "\n" +
+                            "</nav>" + "\n";
+        if (fileNavigationNumbers.size() == 0)
+        {
+            navigationTags = "";
+        }
+        return navigationTags;
     }
 
     public HashMap<String, HashMap<String, String>> GetFileProperties() {

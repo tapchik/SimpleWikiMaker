@@ -3,7 +3,7 @@ package com.example.SimpleWiki.model;
 import com.vladsch.flexmark.util.ast.Node;
 
 import java.util.Arrays;
-import java.util.HashMap;   
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -199,5 +199,9 @@ public class File {
             }
         }
         return htmlText;
+    }
+
+    public void AddNavigation(String navigationTags) {
+        this.text = navigationTags + this.text;
     }
 }

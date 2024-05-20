@@ -1,5 +1,6 @@
 ---
 Type: Markdown information
+Navigation: 3;Possibilities
 ---
 # Possibilities
 
