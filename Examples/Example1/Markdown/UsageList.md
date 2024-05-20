@@ -1,10 +1,13 @@
+---
+Navigation: "1"
+---
 # UsageList
+Применение базовых возможностей языка разметки Markdown:
 
 ```query
 [Kind:Usage]
 ```
-
-```query
-[Kind:Landing page]
-[Current state:Postponed]
-```
+***
+Преимущества: [[Markdown/Advantages]]
+Возможности: [[Markdown/Possibilities]]
+Определение: [[Markdown/Definition]]

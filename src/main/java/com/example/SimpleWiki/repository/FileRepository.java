@@ -8,7 +8,6 @@ public class FileRepository {
     private String folderPath;
     private List<File> allFiles;
     private List<File> currentFiles;
-    private HashMap<String, HashMap<String, String>> filesPropertys;
 
     public FileRepository()
     {
@@ -66,7 +65,7 @@ public class FileRepository {
     }
 
     public String GetPathByName(String name) {
-        return "/p" + this.GetCurrentFolderPath() + (this.GetCurrentFolderPath().equals("/") ? "" :
+        return "/f" + this.GetCurrentFolderPath() + (this.GetCurrentFolderPath().equals("/") ? "" :
         "/") + name.split("\\.")[0];
     }
 
@@ -111,7 +110,6 @@ public class FileRepository {
     }
 
     public void SetHtmlRepositoryByMd(FileRepository mdRepository) {
-        this.filesPropertys = new HashMap<String, HashMap<String,String>>();
         System.out.println("Degub stage: Extracting properties");
         for (File fileMd: mdRepository.GetAllFiles()) 
         {
@@ -123,8 +121,7 @@ public class FileRepository {
                     frontmatter = htmlFile.ExtractFrontmatter();
                     htmlFile.RemoveFrontmatter();
                 }
-                HashMap<String, String> props = htmlFile.ExtractProperties(frontmatter);
-                this.filesPropertys.put(htmlFile.GetPath(), props);
+                htmlFile.SetExtractedProperties(frontmatter);
                 this.AddFile(htmlFile);
             }
             else
@@ -136,10 +133,22 @@ public class FileRepository {
         {
             if (htmlFile.GetType().equals("file"))
             {
-                htmlFile.SetText(htmlFile.MdTextToHtml(this.filesPropertys));
+                htmlFile.SetText(htmlFile.MdTextToHtml(GetFileProperties()));
             }
         }
         this.currentFolderPath = this.folderPath;
         this.SetCurrentFiles();
+    }
+
+    public HashMap<String, HashMap<String, String>> GetFileProperties() {
+        HashMap<String, HashMap<String, String>> properties = new HashMap<String, HashMap<String,String>>();
+        for (File file: this.GetAllFiles())
+        {
+            if (file.GetType().equals("file"))
+            {
+                properties.put(file.GetPath(), file.GetProperties());
+            }
+        }
+        return properties;
     }
 }

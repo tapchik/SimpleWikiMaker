@@ -7,7 +7,15 @@ $('body').on('click', '#htmlFileButton', function() {
         dataType: "text",
         data: {name: txt.toString()},
         success:function(result) {
-            window.open(result); 
+            var path = result;
+            $.ajax({
+                type: "GET",
+                url: path,
+                success:function(result) {
+                    $("#frameDiv").html(result);
+                    console.log("Preview fill"); 
+                },
+            }); 
         },
     });
 });
