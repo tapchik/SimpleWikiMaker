@@ -89,7 +89,7 @@ public class HomeController {
     public String ConvertMdFilesToHtml(Model model) 
     {
         htmlRepository = new FileRepository();
-        htmlRepository.SetHtmlRepositoryByMd(mdRepository);
+        htmlRepository.SetHtmlRepositoryByMd(mdRepository, settingsRepository.GetFileByType("settings"));
         model.addAttribute("showHtmlBackButton", true);
         model.addAttribute("currentHtmlFiles", htmlRepository.GetCurrentFiles());
         return "fragments/listOfHtmlFiles";

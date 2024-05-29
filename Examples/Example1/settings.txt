@@ -1,2 +1,0 @@
-siteName: Example
-email: example_mail@example.com

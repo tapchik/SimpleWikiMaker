@@ -109,7 +109,7 @@ public class FileRepository {
         this.SetCurrentFiles();
     }
 
-    public void SetHtmlRepositoryByMd(FileRepository mdRepository) {
+    public void SetHtmlRepositoryByMd(FileRepository mdRepository, File settings) {
         System.out.println("Degub stage: Extracting properties");
         for (File fileMd: mdRepository.GetAllFiles()) 
         {
@@ -130,7 +130,20 @@ public class FileRepository {
                 this.AddFile(fileMd);
             }
         }
-        String navigationTags = GetFilesNavigation(GetFileProperties());
+        String siteName = "";
+        for (String line: settings.GetText().split("\n"))
+        {
+            if (!(line.split(":").length == 2))
+            {
+                continue;
+            }
+            if (!(line.split(":")[0].equals("siteName")))
+            {
+                continue;
+            }
+            siteName = line.split(":")[1];
+        }
+        String navigationTags = GetFilesNavigation(siteName, GetFileProperties());
         for (File htmlFile: this.GetAllFiles())
         {
             if (htmlFile.GetType().equals("file"))
@@ -143,10 +156,9 @@ public class FileRepository {
         this.SetCurrentFiles();
     }
 
-    public String GetFilesNavigation(HashMap<String, HashMap<String,String>> props) {
+    public String GetFilesNavigation(String siteName, HashMap<String, HashMap<String,String>> props) {
         String navigationTags = "<nav class=\"navbar\">" + "\n"
                                 + "<ul class=\"nav-list\">" + "\n";
-        
         HashMap<Integer, String> fileNavigationNumbers = new HashMap<>();
         for (String pathKey: props.keySet())
         {
@@ -176,6 +188,10 @@ public class FileRepository {
         Collections.sort(fileNavigationByKey);
         for (int i = 0; i < fileNavigationByKey.size(); i++)
         {
+            if (i == 0 && !siteName.equals(""))
+            {
+                navigationTags += "<li><a id=siteName>" + siteName + "</a></li>" + "\n"; 
+            }
             navigationTags += "<li><a href=" + "/p" +  fileNavigationNumbers.get(fileNavigationByKey.get(i)).split("\\|")[0].split("\\.")[0] + ">" 
             + fileNavigationNumbers.get(fileNavigationByKey.get(i)).split("\\|")[1] + "</a></li>" + "\n";
         }

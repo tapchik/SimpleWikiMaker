@@ -173,9 +173,10 @@ public class File {
                 }
                 if (add)
                 {
-                    pageLinks += "<a href=/p" + pathKey.split("\\.")[0] + ">" + pathKey.split("\\.")[0] + "</a>\n";
+                    pageLinks += "<a href=/p" + pathKey.split("\\.")[0].replaceAll(" ", "%20") + ">" + pathKey.split("\\.")[0] + "</a>" + "<br>";
                 }
             }
+            pageLinks = "<div>" + pageLinks + "</div>";
             htmlText = matcher.replaceFirst(pageLinks);
             matcher = pattern.matcher(htmlText);
         }

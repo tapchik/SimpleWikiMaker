@@ -2,11 +2,15 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title th:utext="${title}"></title>
         <style th:utext="${styles}"></style>
         <link th:href="@{/css/page.css}" rel="stylesheet" />
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
     </head>
     <body>
         <div id="mainTagsDiv" th:utext="${mainTags}"></div>
+        <script th:src="@{/js/clickOnNav.js}" type="text/javascript"> </script>
     </body>
 </html>

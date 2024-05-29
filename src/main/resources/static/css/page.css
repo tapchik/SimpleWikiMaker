@@ -26,3 +26,13 @@
     text-decoration: none;
     transition: color 0.3s ease-in-out;
 }
+
+.nav-list li a.active {
+    color: #2ecc40;
+}
+
+.nav-list li #siteName {
+    text-decoration: none;
+    transition: color 0.3s ease-in-out;
+    color: white
+}
