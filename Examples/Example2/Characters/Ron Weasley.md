@@ -1,5 +1,6 @@
 ---
 Kind: Character
+PathAlias: Ron Weasley
 ---
 # Ron Weasley
 ## Информация

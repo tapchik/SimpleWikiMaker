@@ -1,5 +1,6 @@
 ---
 Kind: Actor
+PathAlias: Daniel Radcliffe
 ---
 # Daniel Radcliffe
 ## Биография

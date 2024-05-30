@@ -1,5 +1,6 @@
 ---
 Kind: Actor
+PathAlias: Emma Watson
 ---
 # Emma Watson
 ## Биография

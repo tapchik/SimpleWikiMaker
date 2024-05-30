@@ -1,5 +1,6 @@
 ---
 Kind: Actor
+PathAlias: Rupert Grint
 ---
 # Rupert Grint
 ## Биография

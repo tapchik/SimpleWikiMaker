@@ -1,5 +1,6 @@
 ---
 Kind: Character
+PathAlias: Harry Potter
 ---
 # Harry Potter
 ## Информация

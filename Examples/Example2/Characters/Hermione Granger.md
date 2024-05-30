@@ -1,5 +1,6 @@
 ---
 Kind: Character
+PathAlias: Hermione Granger
 ---
 # Hermione Granger
 ## Информация

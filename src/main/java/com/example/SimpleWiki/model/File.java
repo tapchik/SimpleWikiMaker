@@ -173,7 +173,8 @@ public class File {
                 }
                 if (add)
                 {
-                    pageLinks += "<li class=\"dynamicListLi\"><a href=/p" + pathKey.split("\\.")[0].replaceAll(" ", "%20") + ">" + pathKey.split("\\.")[0] + "</a></li>";
+                    pageLinks += "<li class=\"dynamicListLi\"><a href=/p" + pathKey.split("\\.")[0].replaceAll(" ", "%20") + ">" 
+                    + (props.get(pathKey).containsKey("PathAlias") ? props.get(pathKey).get("PathAlias") : pathKey.split("\\.")[0]) + "</a></li>";
                 }
             }
             pageLinks = "<div class=\"dynamicListDiv\">" + pageLinks + "</div>";
