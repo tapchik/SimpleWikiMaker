@@ -25,6 +25,7 @@
 .nav-list li a {
     text-decoration: none;
     transition: color 0.3s ease-in-out;
+    font-size: 25px;
 }
 
 .nav-list li a.active {
@@ -35,4 +36,13 @@
     text-decoration: none;
     transition: color 0.3s ease-in-out;
     color: white
+}
+
+.dynamicListDiv {
+    border: 1px solid white;
+    padding: 10px;
+}
+
+.dynamicListLi {
+    margin: 5px;
 }

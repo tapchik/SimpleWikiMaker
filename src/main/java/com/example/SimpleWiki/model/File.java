@@ -148,7 +148,7 @@ public class File {
         Matcher matcher = pattern.matcher(htmlText);
         while (matcher.find())
         {
-            String pageLinks = "";
+            String pageLinks = "<ul>";
             for (String propLine: matcher.group(1).split("\n"))
             {
                 String line = propLine.substring(1, propLine.length()-1);
@@ -173,10 +173,10 @@ public class File {
                 }
                 if (add)
                 {
-                    pageLinks += "<a href=/p" + pathKey.split("\\.")[0].replaceAll(" ", "%20") + ">" + pathKey.split("\\.")[0] + "</a>" + "<br>";
+                    pageLinks += "<li class=\"dynamicListLi\"><a href=/p" + pathKey.split("\\.")[0].replaceAll(" ", "%20") + ">" + pathKey.split("\\.")[0] + "</a></li>";
                 }
             }
-            pageLinks = "<div>" + pageLinks + "</div>";
+            pageLinks = "<div class=\"dynamicListDiv\">" + pageLinks + "</div>";
             htmlText = matcher.replaceFirst(pageLinks);
             matcher = pattern.matcher(htmlText);
         }

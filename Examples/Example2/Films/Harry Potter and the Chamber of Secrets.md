@@ -1,5 +1,6 @@
 ---
 Kind: Film
+PathAlias: Harry Potter and the Chamber of Secrets
 ---
 # Harry Potter and the Chamber of Secrets
 ## Описание
