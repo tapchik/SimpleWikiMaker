@@ -122,7 +122,6 @@ public class FileRepository {
                     htmlFile.RemoveFrontmatter();
                 }
                 htmlFile.SetExtractedProperties(frontmatter);
-
                 this.AddFile(htmlFile);
             }
             else
@@ -130,19 +129,7 @@ public class FileRepository {
                 this.AddFile(fileMd);
             }
         }
-        String siteName = "";
-        for (String line: settings.GetText().split("\n"))
-        {
-            if (!(line.split(":").length == 2))
-            {
-                continue;
-            }
-            if (!(line.split(":")[0].equals("siteName")))
-            {
-                continue;
-            }
-            siteName = line.split(":")[1];
-        }
+        String siteName = GetSiteName(settings);
         String navigationTags = GetFilesNavigation(siteName, GetFileProperties());
         for (File htmlFile: this.GetAllFiles())
         {
@@ -202,6 +189,23 @@ public class FileRepository {
             navigationTags = "";
         }
         return navigationTags;
+    }
+
+    public String GetSiteName(File settings) {
+        String siteName = "";
+        for (String line: settings.GetText().split("\n"))
+        {
+            if (!(line.split(":").length == 2))
+            {
+                continue;
+            }
+            if (!(line.split(":")[0].equals("siteName")))
+            {
+                continue;
+            }
+            siteName = line.split(":")[1];
+        }
+        return siteName;
     }
 
     public HashMap<String, HashMap<String, String>> GetFileProperties() {
