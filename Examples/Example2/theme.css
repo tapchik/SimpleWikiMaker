@@ -108,6 +108,7 @@ p,
 .retro-p {
   font-size: 1rem;
   margin-bottom: 1.3rem;
+  text-align: justify;  /*added*/
 }
 
 h1,
@@ -124,7 +125,7 @@ h4,
 }
 
 h1,
-.retro-h1 {
+.retro-h1 { /*lower font size*/
   margin-top: 0;
   font-size: 1.907rem;
 }

@@ -31,6 +31,15 @@ $('body').on('click', '#pickFilesButton', async (evt) => {
                         success:function(result) {
                             $("#htmlFiles").html(result);
                             console.log("HTML files fill");
+                            var path = "/defaultPageFrame";
+                            $.ajax({
+                                type: "GET",
+                                url: path,
+                                success:function(result) {
+                                    $("#frameDiv").html(result);
+                                    console.log("Preview fill"); 
+                                },
+                            }); 
                         },
                     });
                 },

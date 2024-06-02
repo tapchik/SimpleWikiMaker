@@ -177,7 +177,7 @@ public class FileRepository {
         {
             if (i == 0 && !siteName.equals(""))
             {
-                navigationTags += "<li><a id=siteName>" + siteName + "</a></li>" + "\n"; 
+                navigationTags += "<li><a href=\"/p/Welcome\" id=siteName>" + siteName + "</a></li>" + "\n"; 
             }
             navigationTags += "<li><a href=" + "/p" +  fileNavigationNumbers.get(fileNavigationByKey.get(i)).split("\\|")[0].split("\\.")[0] + ">" 
             + fileNavigationNumbers.get(fileNavigationByKey.get(i)).split("\\|")[1] + "</a></li>" + "\n";

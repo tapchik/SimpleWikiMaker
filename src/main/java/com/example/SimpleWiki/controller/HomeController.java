@@ -21,7 +21,6 @@ public class HomeController {
     FileRepository mdRepository;
     FileRepository htmlRepository;
     FileRepository settingsRepository;
-    String currentSrcPreview;
 
     public HomeController()
     {
@@ -118,13 +117,6 @@ public class HomeController {
         return htmlRepository.GetPathByName(name);
     }
 
-    @RequestMapping("/getCurrentSrcPage")
-    @ResponseBody
-    public String GetCurrentSrcPage() 
-    {
-        return currentSrcPreview;
-    }
-
     @RequestMapping("/setSettingsFiles")
     @ResponseBody
     public void SetSettingsFiles(@RequestBody List<File> settingFiles)
@@ -136,7 +128,6 @@ public class HomeController {
     @RequestMapping(value = "/f/**")
     public String GetHtmlPageFrame(HttpServletRequest request, Model model) {
         String restOfTheUrl = new AntPathMatcher().extractPathWithinPattern(request.getAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE).toString(),request.getRequestURI());
-        currentSrcPreview = "/p/"+restOfTheUrl;
         model.addAttribute("path", "/p/"+restOfTheUrl);
         return "fragments/pageFrame";
     }
@@ -144,26 +135,30 @@ public class HomeController {
     @RequestMapping(value = "/defaultPageFrame")
     public String GetDefaultHtmlPageFrame(Model model) {
         model.addAttribute("path", "/defaultPage");
-        currentSrcPreview = "/p/";
         return "fragments/pageFrame";
     }
 
     @RequestMapping(value = "/defaultPage")
     public String GetDefaultHtmlPage(Model model) {
-        model.addAttribute("mainTags", "<p class=\"text-info\">Select site content</p>");
+        model.addAttribute("mainTags", "<p class=\"text-info\">Build the site or select site content</p>");
         return "page";
     }
 
     @RequestMapping(value = "/p/**")
     public String GetHtmlPage(HttpServletRequest request, Model model) {
         String restOfTheUrl = new AntPathMatcher().extractPathWithinPattern(request.getAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE).toString(),request.getRequestURI());
-        currentSrcPreview = "/p/"+restOfTheUrl;
         File htmlFile = htmlRepository.GetFileByPath("/" + restOfTheUrl + ".html");
         String title = "Error";
         String stylesFile = (settingsRepository.GetFileByType("theme") == null ? "" : settingsRepository.GetFileByType("theme").GetText());
         String tags = "<p>File doesnt exist</p>";
         if (htmlFile != null)
         {
+            title = htmlFile.GetName();
+            tags = htmlFile.GetText();
+        }
+        else if (restOfTheUrl.equals("Welcome"))
+        {
+            htmlFile = htmlRepository.GetFileByType("file");
             title = htmlFile.GetName();
             tags = htmlFile.GetText();
         }

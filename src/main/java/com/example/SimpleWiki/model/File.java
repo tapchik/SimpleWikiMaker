@@ -140,7 +140,7 @@ public class File {
             System.out.println(String.format("File %s has no properties", this.name));
         SetProperties(properties);
     }
-
+ 
     private String AddQuery(String htmlText, HashMap<String, HashMap<String, String>> props) {
         HashMap<String, String> queryProps = new HashMap<String, String>();
         String regex = "^```query\\n((\\[([^\\[\\]\\n])+:([^\\[\\]\\n])*\\]\\n)+)```$";
