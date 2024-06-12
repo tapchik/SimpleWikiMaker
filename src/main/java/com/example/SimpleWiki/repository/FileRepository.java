@@ -1,13 +1,13 @@
 package com.example.SimpleWiki.repository;
 import java.util.*;
 
-import com.example.SimpleWiki.model.File;
+import com.example.SimpleWiki.model.FileObject;
 
 public class FileRepository {
     private String currentFolderPath;
     private String folderPath;
-    private List<File> allFiles;
-    private List<File> currentFiles;
+    private List<FileObject> allFiles;
+    private List<FileObject> currentFiles;
 
     public FileRepository()
     {
@@ -19,12 +19,12 @@ public class FileRepository {
         return this.currentFolderPath;
     }
 
-    public List<File> GetAllFiles()
+    public List<FileObject> GetAllFiles()
     {
         return this.allFiles;
     }
 
-    public List<File> GetCurrentFiles()
+    public List<FileObject> GetCurrentFiles()
     {
         return this.currentFiles;
     }
@@ -34,7 +34,7 @@ public class FileRepository {
         this.currentFolderPath = currentFolder;
     }
 
-    public void SetAllFiles(List<File> allFiles) 
+    public void SetAllFiles(List<FileObject> allFiles) 
     {
         this.allFiles = allFiles;
     }
@@ -43,8 +43,8 @@ public class FileRepository {
         this.folderPath = folderPath;
     }
     
-    public File GetFileByType(String type) {
-        for (File file: this.allFiles) {
+    public FileObject GetFileByType(String type) {
+        for (FileObject file: this.allFiles) {
             if (file.GetType().equals(type)) {
                 return file;
             }
@@ -52,9 +52,9 @@ public class FileRepository {
         return null;
     }
 
-    public File GetFileByPath(String path)
+    public FileObject GetFileByPath(String path)
     {
-        for (File file: this.allFiles)
+        for (FileObject file: this.allFiles)
         {
             if (file.GetPath().replaceAll(" ", "%20").equals(path))
             {
@@ -71,17 +71,17 @@ public class FileRepository {
 
     public void AddFile(String fileName, String fileText, String fileType, String filePath)
     {
-        this.allFiles.add(new File(fileName, fileText, filePath, fileType));
+        this.allFiles.add(new FileObject(fileName, fileText, filePath, fileType));
     }
 
-    public void AddFile(File file)
+    public void AddFile(FileObject file)
     {
         this.allFiles.add(file);
     }
 
     public void SetCurrentFiles()
     {  
-        for(File file: this.allFiles)
+        for(FileObject file: this.allFiles)
         {
             if (file.GetPath().substring(0, file.GetPath().lastIndexOf("/") == 0 ? 1 : file.GetPath().lastIndexOf("/")).equals(this.currentFolderPath))
             {
@@ -91,31 +91,31 @@ public class FileRepository {
     }
 
     public void SetClearRepository() {
-        this.allFiles = new ArrayList<File>();
+        this.allFiles = new ArrayList<FileObject>();
         this.currentFolderPath = "/";
         this.folderPath = "/";
-        this.currentFiles = new ArrayList<File>();
+        this.currentFiles = new ArrayList<FileObject>();
     }
 
     public void CurrentFilesUp(String name) {
-        this.currentFiles = new ArrayList<File>();
+        this.currentFiles = new ArrayList<FileObject>();
         this.currentFolderPath += this.currentFolderPath.equals("/") ? name : "/" + name;
         this.SetCurrentFiles();
     }
 
     public void CurrentFilesDown() {
-        this.currentFiles = new ArrayList<File>();
+        this.currentFiles = new ArrayList<FileObject>();
         this.currentFolderPath = this.currentFolderPath.substring(0, this.currentFolderPath.lastIndexOf("/") == 0 ? 1 : this.currentFolderPath.lastIndexOf("/"));
         this.SetCurrentFiles();
     }
 
-    public void SetHtmlRepositoryByMd(FileRepository mdRepository, File settings) {
+    public void SetHtmlRepositoryByMd(FileRepository mdRepository, FileObject settings) {
         System.out.println("Degub stage: Extracting properties");
-        for (File fileMd: mdRepository.GetAllFiles()) 
+        for (FileObject fileMd: mdRepository.GetAllFiles()) 
         {
             if (fileMd.GetType().equals("file"))
             {
-                File htmlFile = new File(fileMd.GetName().split("\\.")[0] + ".html", fileMd.GetText(), fileMd.GetPath().split("\\.")[0] + ".html", "file");
+                FileObject htmlFile = new FileObject(fileMd.GetName().split("\\.")[0] + ".html", fileMd.GetText(), fileMd.GetPath().split("\\.")[0] + ".html", "file");
                 String frontmatter = "";
                 if (htmlFile.HasFrontmatter()) {
                     frontmatter = htmlFile.ExtractFrontmatter();
@@ -131,7 +131,7 @@ public class FileRepository {
         }
         String siteName = GetSiteName(settings);
         String navigationTags = GetFilesNavigation(siteName, GetFileProperties());
-        for (File htmlFile: this.GetAllFiles())
+        for (FileObject htmlFile: this.GetAllFiles())
         {
             if (htmlFile.GetType().equals("file"))
             {
@@ -177,9 +177,9 @@ public class FileRepository {
         {
             if (i == 0 && !siteName.equals(""))
             {
-                navigationTags += "<li><a href=\"/p/Welcome\" id=siteName>" + siteName + "</a></li>" + "\n"; 
+                navigationTags += "<li><a class=\"relativeLink\" href=\"/Welcome\" id=siteName>" + siteName + "</a></li>" + "\n"; 
             }
-            navigationTags += "<li><a href=" + "/p" +  fileNavigationNumbers.get(fileNavigationByKey.get(i)).split("\\|")[0].split("\\.")[0] + ">" 
+            navigationTags += "<li><a class=\"relativeLink\" href=" +  fileNavigationNumbers.get(fileNavigationByKey.get(i)).split("\\|")[0].split("\\.")[0] + ">" 
             + fileNavigationNumbers.get(fileNavigationByKey.get(i)).split("\\|")[1] + "</a></li>" + "\n";
         }
         navigationTags += "</ul>" + "\n" +
@@ -191,7 +191,7 @@ public class FileRepository {
         return navigationTags;
     }
 
-    public String GetSiteName(File settings) {
+    public String GetSiteName(FileObject settings) {
         String siteName = "";
         for (String line: settings.GetText().split("\n"))
         {
@@ -210,7 +210,7 @@ public class FileRepository {
 
     public HashMap<String, HashMap<String, String>> GetFileProperties() {
         HashMap<String, HashMap<String, String>> properties = new HashMap<String, HashMap<String,String>>();
-        for (File file: this.GetAllFiles())
+        for (FileObject file: this.GetAllFiles())
         {
             if (file.GetType().equals("file"))
             {

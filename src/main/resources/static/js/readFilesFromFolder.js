@@ -78,6 +78,14 @@ async function handleDirectoryEntry(filePath, dirHandle, out, fileList, settings
                 settingStr["type"] = "settings";
                 settingsList.push(settingStr);
             }
+            else if (file.name === "addTheme.css") {
+                const fileContent = await file.text();
+                const settingStr = {};
+                settingStr["name"] = file.name;
+                settingStr["text"] = fileContent;
+                settingStr["type"] = "addTheme";
+                settingsList.push(settingStr);
+            }
         }
         if (entry.kind === "directory") {
             const newHandle = await dirHandle.getDirectoryHandle(entry.name, {

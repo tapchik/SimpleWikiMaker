@@ -29,3 +29,9 @@ $('body').on('click', '#openOnNewPage', function() {
         },
     });
 });
+
+$('body').on('click', '.relativeLink', function(e) {
+    var href = $(this).attr('href');
+    document.location = "/p" + href;
+    return false;
+});

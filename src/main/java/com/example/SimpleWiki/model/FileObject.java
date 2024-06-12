@@ -14,7 +14,7 @@ import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.util.data.MutableDataSet;
 
-public class File {
+public class FileObject {
     private String name;
     private String text;
     private String path;
@@ -49,7 +49,7 @@ public class File {
         this.properties = properties;
     }
 
-    public File(String name, String text, String path, String type)
+    public FileObject(String name, String text, String path, String type)
     {
         this.name = name;
         this.text = text;
@@ -173,7 +173,7 @@ public class File {
                 }
                 if (add)
                 {
-                    pageLinks += "<li class=\"dynamicListLi\"><a href=/p" + pathKey.split("\\.")[0].replaceAll(" ", "%20") + ">" 
+                    pageLinks += "<li class=\"dynamicListLi\"><a class=\"relativeLink\" href=" + pathKey.split("\\.")[0].replaceAll(" ", "%20") + ">" 
                     + (props.get(pathKey).containsKey("PathAlias") ? props.get(pathKey).get("PathAlias") : pathKey.split("\\.")[0]) + "</a></li>";
                 }
             }
@@ -193,8 +193,8 @@ public class File {
         {
             if (!matcher.group(1).trim().equals(""))
             {
-                htmlText = matcher.replaceFirst(match -> MessageFormat.format("<a href={0}>{1}</a>", 
-                "/p/"+ (match.group(1).indexOf("|") != -1 ? match.group(1).split("\\|")[0].replaceAll(" ", "%20") 
+                htmlText = matcher.replaceFirst(match -> MessageFormat.format("<a class=\"relativeLink\" href={0}>{1}</a>", 
+                "/" + (match.group(1).indexOf("|") != -1 ? match.group(1).split("\\|")[0].replaceAll(" ", "%20") 
                 : match.group(1).replaceAll(" ", "%20")), 
                 (match.group(1).indexOf("|") != -1 ? match.group(1).split("\\|")[1] : match.group(1))));
                 matcher = pattern.matcher(htmlText);
@@ -205,5 +205,21 @@ public class File {
 
     public void AddNavigation(String navigationTags) {
         this.text = navigationTags + this.text;
+    }
+
+    public String GetFullHtml(String stylesFile, String addStyles) {
+        String htmlTags = "<!DOCTYPE html>" + "<br>";
+        htmlTags += "<html lang=\"en\">" + "\n";
+        htmlTags += "<head>" + "\n";
+        htmlTags += "<meta charset=\"utf-8\"/>" + "\n";
+        htmlTags += "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">" + "\n";
+        htmlTags += "<title>" + this.name.split("\\.")[0] + "</title>" + "\n";
+        htmlTags += "<style>" + stylesFile + "\n" + addStyles + "</style>" + "\n";
+        htmlTags += "</head>" + "\n";
+        htmlTags += "<body>" + "\n";
+        htmlTags += "<div id=\"mainTagsDiv\">" + this.text + "</div>" + "\n";
+        htmlTags += "</body>" + "\n";
+        htmlTags += "</html>";
+        return htmlTags;
     }
 }

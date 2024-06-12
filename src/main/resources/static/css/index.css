@@ -2,7 +2,7 @@
 {display: flex; justify-content: center; }
 
 .headerDiv
-{ margin: 40px; display:flex; align-items: center; justify-content: center; }
+{margin: 40px; display:flex; align-items: center; justify-content: center; }
 
 .fileManagerDiv
 {width: 410px; height: 300px; max-height: 300px; margin: 0 10px; }
@@ -32,7 +32,16 @@
 {pointer-events: none;}
 
 svg 
-{ width: 24px; height: 24px; }
+{width: 24px; height: 24px; }
 
 .item
-{ display: grid; align-items: center; justify-items: start; grid-template-columns: 32px auto; padding: 4px;}
+{display: grid; align-items: center; justify-items: start; grid-template-columns: 32px auto; padding: 4px;}
+
+.sitePublicateDiv 
+{display: flex; justify-content: center; margin-bottom: 50px;}
+
+.ftpInput
+{width: 200px; margin-right: 20px;}
+
+#ftpUpload
+{margin-top: 48px;}

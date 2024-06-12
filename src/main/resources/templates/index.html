@@ -36,9 +36,38 @@
                 <div id="frameDiv" th:insert="~{fragments/pageFrame.html :: iframe}"></div>
             </div>
         </div>
+        <div class="headerDiv">
+            <h3>Publicate</h3>
+        </div>
+        <div class="sitePublicateDiv">
+            <div class="ftpInput">
+                <label class="col-form-label mt-4" for="inputDefault">Login</label>
+                <input id="ftpLogin" type="text" class="form-control" placeholder="Default input">
+            </div>
+            <div class="ftpInput">
+                <label class="col-form-label mt-4" for="inputDefault">Password</label>
+                <input id="ftpPassword" type="text" class="form-control" placeholder="Default input">
+            </div>
+            <div class="ftpInput">
+                <label class="col-form-label mt-4" for="inputDefault">IP</label>
+                <input id="ftpIp" type="text" class="form-control" placeholder="Default input">
+            </div>
+            <div class="ftpInput">
+                <label class="col-form-label mt-4" for="inputDefault">Port</label>
+                <input id="ftpPort" type="text" class="form-control" placeholder="Default input">
+            </div>
+            <div class="ftpInput">
+                <label class="col-form-label mt-4" for="inputDefault">Folder</label>
+                <input id="ftpFolder" type="text" class="form-control" placeholder="Default input">
+            </div>
+            <div class="ftpInput">
+                <button id="ftpUpload" type="button" class="btn btn-primary">Upload through FTP</button>
+            </div>
+        </div>
         <script th:src="@{/js/readFilesFromFolder.js}" type="text/javascript"> </script>
         <script th:src="@{/js/convertToHtml.js}" type="text/javascript"></script>
         <script th:src="@{/js/clickOnFile.js}" type="text/javascript"></script>
         <script th:src="@{/js/openNewPage.js}" type="text/javascript"></script>
+        <script th:src="@{/js/ftpUpload.js}" type="text/javascript"></script>
     </body>
 </html>
