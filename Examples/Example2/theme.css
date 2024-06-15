@@ -1,3 +1,4 @@
+/*For page content*/
 /* source: github.com/markdowncss */
 pre,
 code {
@@ -198,4 +199,61 @@ pre {
 blockquote {
   border-left: 3px solid #01ff70;
   padding-left: 1rem;
+}
+
+
+/*For navigation*/
+.navbar {
+  display: flex;
+  align-items: center;
+  background-blend-mode: darken;
+  background-size: cover;
+  color: white;
+  padding: 10px 20px;
+  padding-left: 0px;
+}
+
+.nav-list {
+  display: flex;
+  list-style: none;
+  padding-left: 0px;
+}
+
+.nav-list li {
+  margin-right: 20px;
+}
+
+.nav-list li:last-child {
+  margin-right: 0;
+}
+
+.nav-list li a {
+  text-decoration: none;
+  transition: color 0.3s ease-in-out;
+  font-size: 25px;
+}
+
+.nav-list li a.active {
+  color: #2ecc40;
+}
+
+.nav-list li #siteName {
+  text-decoration: none;
+  transition: color 0.3s ease-in-out;
+  color: white;
+}
+
+.dynamicListDiv {
+  border: 1px solid white;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.dynamicListLi {
+  margin: 5px;
+}
+
+table, th, td {
+  border: 1px solid white;
+  border-collapse: collapse;
 }

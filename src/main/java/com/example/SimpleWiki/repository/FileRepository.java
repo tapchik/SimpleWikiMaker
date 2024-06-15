@@ -1,6 +1,7 @@
 package com.example.SimpleWiki.repository;
 import java.util.*;
 
+import com.example.SimpleWiki.enums.FileType;
 import com.example.SimpleWiki.model.FileObject;
 
 public class FileRepository {
@@ -43,9 +44,9 @@ public class FileRepository {
         this.folderPath = folderPath;
     }
     
-    public FileObject GetFileByType(String type) {
+    public FileObject GetFileByType(FileType type) {
         for (FileObject file: this.allFiles) {
-            if (file.GetType().equals(type)) {
+            if (file.GetType() == type) {
                 return file;
             }
         }
@@ -110,10 +111,10 @@ public class FileRepository {
     }
 
     public void SetHtmlRepositoryByMd(FileRepository mdRepository, FileObject settings) {
-        System.out.println("Degub stage: Extracting properties");
+        System.out.println("Debug stage: Extracting properties");
         for (FileObject fileMd: mdRepository.GetAllFiles()) 
         {
-            if (fileMd.GetType().equals("file"))
+            if (fileMd.GetType() == FileType.FILE)
             {
                 FileObject htmlFile = new FileObject(fileMd.GetName().split("\\.")[0] + ".html", fileMd.GetText(), fileMd.GetPath().split("\\.")[0] + ".html", "file");
                 String frontmatter = "";
@@ -129,14 +130,17 @@ public class FileRepository {
                 this.AddFile(fileMd);
             }
         }
-        String siteName = GetSiteName(settings);
-        String navigationTags = GetFilesNavigation(siteName, GetFileProperties());
         for (FileObject htmlFile: this.GetAllFiles())
         {
-            if (htmlFile.GetType().equals("file"))
+            if (htmlFile.GetType() == FileType.FILE)
             {
                 htmlFile.SetText(htmlFile.MdTextToHtml(GetFileProperties()));
-                htmlFile.AddNavigation(navigationTags);
+                if (settings != null)
+                {
+                    String siteName = GetSiteName(settings);
+                    String navigationTags = GetFilesNavigation(siteName, GetFileProperties());
+                    htmlFile.AddNavigation(navigationTags);
+                }
             }
         }
         this.currentFolderPath = this.folderPath;
@@ -184,7 +188,7 @@ public class FileRepository {
         }
         navigationTags += "</ul>" + "\n" +
                             "</nav>" + "\n";
-        if (fileNavigationNumbers.size() == 0)
+        if (fileNavigationNumbers.isEmpty())
         {
             navigationTags = "";
         }
@@ -193,14 +197,11 @@ public class FileRepository {
 
     public String GetSiteName(FileObject settings) {
         String siteName = "";
-        for (String line: settings.GetText().split("\n"))
-        {
-            if (!(line.split(":").length == 2))
-            {
+        for (String line: settings.GetText().split("\n")) {
+            if (!(line.split(":").length == 2)) {
                 continue;
             }
-            if (!(line.split(":")[0].equals("siteName")))
-            {
+            if (!(line.split(":")[0].equals("siteName"))) {
                 continue;
             }
             siteName = line.split(":")[1];
@@ -212,7 +213,7 @@ public class FileRepository {
         HashMap<String, HashMap<String, String>> properties = new HashMap<String, HashMap<String,String>>();
         for (FileObject file: this.GetAllFiles())
         {
-            if (file.GetType().equals("file"))
+            if (file.GetType() == FileType.FILE)
             {
                 properties.put(file.GetPath(), file.GetProperties());
             }
