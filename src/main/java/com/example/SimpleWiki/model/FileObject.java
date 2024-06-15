@@ -208,14 +208,14 @@ public class FileObject {
         this.text = navigationTags + this.text;
     }
 
-    public String GetFullHtml(String stylesFile, String addStyles) {
+    public String GetFullHtml(String stylesFile) {
         String htmlTags = "<!DOCTYPE html>" + "<br>";
         htmlTags += "<html lang=\"en\">" + "\n";
         htmlTags += "<head>" + "\n";
         htmlTags += "<meta charset=\"utf-8\"/>" + "\n";
         htmlTags += "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">" + "\n";
         htmlTags += "<title>" + this.name.split("\\.")[0] + "</title>" + "\n";
-        htmlTags += "<style>" + stylesFile + "\n" + addStyles + "</style>" + "\n";
+        htmlTags += "<style>" + stylesFile + "</style>" + "\n";
         htmlTags += "</head>" + "\n";
         htmlTags += "<body>" + "\n";
         htmlTags += "<div id=\"mainTagsDiv\">" + this.text + "</div>" + "\n";

@@ -1,8 +1,4 @@
 package com.example.SimpleWiki.controller;
-import java.io.Console;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -17,7 +13,6 @@ import com.split.ftp.FtpOperation;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.AntPathMatcher;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -189,7 +184,6 @@ public class HomeController {
     public String uploadToFtp(@RequestParam(name="login") String login, @RequestParam(name="password") String password, 
     @RequestParam(name="ip") String ip, @RequestParam(name="port") String port, @RequestParam(name="folder") String folder) {
         String stylesFile = (settingsRepository.GetFileByType(FileType.THEME) == null ? "" : settingsRepository.GetFileByType(FileType.THEME).GetText());
-        String addStyles = (settingsRepository.GetFileByType(FileType.ADD_THEME) == null ? "" : settingsRepository.GetFileByType(FileType.ADD_THEME).GetText());
         try 
         {
             FtpOperation ftpOperation = new FtpOperation(login, password, ip, Integer.parseInt(port), "/" + folder);
@@ -207,7 +201,7 @@ public class HomeController {
                     if (file.GetType() == FileType.FILE)
                     {
                         Path tempFile = Files.createTempFile(null, null);
-                        List<String> content = Arrays.asList(file.GetFullHtml(stylesFile, addStyles));
+                        List<String> content = Arrays.asList(file.GetFullHtml(stylesFile));
                         Files.write(tempFile, content, StandardOpenOption.APPEND);
                         InputStream inputStream = FileUtil.getInputStream(tempFile);
                         ftpOperation.uploadToFtp(inputStream, file.GetPath().split("\\.")[0], false);

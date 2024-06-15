@@ -4,8 +4,7 @@ public enum FileType {
     FILE("file"),
     DIR("dir"),
     SETTINGS("settings"),
-    THEME("theme"),
-    ADD_THEME("addTheme");
+    THEME("theme");
 
     public final String text;
 
@@ -23,7 +22,6 @@ public enum FileType {
             case "dir" -> FileType.DIR;
             case "settings" -> FileType.SETTINGS;
             case "theme" -> FileType.THEME;
-            case "addTheme" -> FileType.ADD_THEME;
             default -> null;
         };
     }

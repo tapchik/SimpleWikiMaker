@@ -1,20 +1,17 @@
 package com.split.ftp;
- 
- 
+
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.net.ftp.*;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
  
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Calendar;
 import java.util.Date;
- 
- 
+  
 /**
-   * Class description: file upload and download tools
+ * Class description: file upload and download tools
  */
 @Component
 @Data
@@ -30,15 +27,15 @@ public class FtpOperation {
  
     private int port;
  
-    private String CURRENT_DIR; // The directory where the file is stored
+    // The directory where the file is stored
+    private String CURRENT_DIR;
  
     public static final String DIRSPLIT = "/";
- 
- 
-         // Downloaded file directory
+    
+    // Downloaded file directory
     private String DOWNLOAD_DIR;
  
-         // ftp client
+    // ftp client
     private FTPClient ftpClient = new FTPClient();
 
     public FtpOperation(String login, String password, String ip, int port, String folder) {
@@ -50,22 +47,21 @@ public class FtpOperation {
     }
  
     /**
-           * Function: upload file attachment to file server
+     * Function: upload file attachment to file server
      *
-           * @param buffIn: upload file stream
-           * @param fileName: save the file name
-           * @param needDelete: whether to delete at the same time
+     * @param buffIn: upload file stream
+     * @param fileName: save the file name
+     * @param needDelete: whether to delete at the same time
      * @return
      * @throws IOException
      */
     public boolean uploadToFtp(InputStream buffIn, String fileName, boolean needDelete) throws FTPConnectionClosedException, IOException, Exception {
         boolean returnValue = false;
-                 // upload files 
+        // upload files 
         try {
- 
-                         // establish connection 
+            // establish connection 
             connectToServer();
-                         // Set transfer binary file
+            // Set transfer binary file
             setFileType(FTP.BINARY_FILE_TYPE);
             int reply = ftpClient.getReplyCode();
             if (!FTPReply.isPositiveCompletion(reply)) {
@@ -73,28 +69,28 @@ public class FtpOperation {
                 throw new IOException("failed to connect to the FTP Server:" + ip);
             }
             ftpClient.enterLocalPassiveMode();
-               /* if(StringUtils.checkStr(CURRENT_DIR)){
-                	if(!existDirectory(CURRENT_DIR)){
-                		this.createDirectory(CURRENT_DIR);
-                	}
-                    ftpClient.changeWorkingDirectory(CURRENT_DIR);
-                }*/
-                         // Upload file to ftp
+            /* if(StringUtils.checkStr(CURRENT_DIR)){
+                if(!existDirectory(CURRENT_DIR)){
+                    this.createDirectory(CURRENT_DIR);
+                }
+                ftpClient.changeWorkingDirectory(CURRENT_DIR);
+            }*/
+            // Upload file to ftp
             returnValue = ftpClient.storeFile(CURRENT_DIR+fileName, buffIn);
             if (needDelete) {
                 ftpClient.deleteFile(CURRENT_DIR+fileName);
             }
-                         // Output operation result information
+            // Output operation result information
             if (returnValue) {
                 log.info("uploadToFtp INFO: upload file  to ftp : succeed!");
             } else {
                 log.info("uploadToFtp INFO: upload file  to ftp : failed!");
             }
             buffIn.close();
-                         // close the connection
+            // close the connection
             closeConnect();
         } catch (FTPConnectionClosedException e) {
-                         log.error("FTP connection was closed!", e);
+            log.error("FTP connection was closed!", e);
             throw e;
         } catch (Exception e) {
             returnValue = false;
@@ -115,11 +111,8 @@ public class FtpOperation {
         return returnValue;
     }
  
- 
- 
- 
     /**
-           * Function: download file stream according to file name
+     * Function: download file stream according to file name
      *
      * @param filename
      * @return
@@ -129,10 +122,10 @@ public class FtpOperation {
             throws IOException {
         InputStream in = null;
         try {
-                         // establish connection 
+            // establish connection 
             connectToServer();
             ftpClient.enterLocalPassiveMode();
-                         // Set transfer binary file
+            // Set transfer binary file
             setFileType(FTP.BINARY_FILE_TYPE);
             int reply = ftpClient.getReplyCode();
             if (!FTPReply.isPositiveCompletion(reply)) {
@@ -140,12 +133,11 @@ public class FtpOperation {
                 throw new IOException("failed to connect to the FTP Server:" + ip);
             }
             ftpClient.changeWorkingDirectory(CURRENT_DIR);
- 
-                         // ftp file get file
+            // ftp file get file
             in = ftpClient.retrieveFileStream(filename);
  
         } catch (FTPConnectionClosedException e) {
-                         log.error("FTP connection was closed!", e);
+            log.error("FTP connection was closed!", e);
             throw e;
         } catch (Exception e) {
             log.error("ERR : upload file " + filename + " from ftp : failed!", e);
@@ -154,24 +146,24 @@ public class FtpOperation {
     }
  
     /**
-           * Transcoding [GBK -> ISO-8859-1] Different platforms require different transcoding
+     * Transcoding [GBK -> ISO-8859-1] Different platforms require different transcoding
      *
      * @param obj
      * @return
      */
-        //    private String gbkToIso8859(Object obj) {
-        //        try {
-        //            if (obj == null)
-        //                return "";
-        //            else
-        //                return new String(obj.toString().getBytes("GBK"), "iso-8859-1");
-        //        } catch (Exception e) {
-        //            return "";
-        //        }
-        //    }
+    //    private String gbkToIso8859(Object obj) {
+    //        try {
+    //            if (obj == null)
+    //                return "";
+    //            else
+    //                return new String(obj.toString().getBytes("GBK"), "iso-8859-1");
+    //        } catch (Exception e) {
+    //            return "";
+    //        }
+    //    }
  
     /**
-           * Set the type of transferred file [text file or binary file]
+     * Set the type of transferred file [text file or binary file]
      *
      * @param fileType --BINARY_FILE_TYPE、ASCII_FILE_TYPE
      */
@@ -184,7 +176,7 @@ public class FtpOperation {
     }
  
     /**
-           * Function: close the connection
+     * Function: close the connection
      */
     public void closeConnect() {
         try {
@@ -198,7 +190,7 @@ public class FtpOperation {
     }
  
     /**
-           * Connect to ftp server
+     * Connect to ftp server
      */
     private void connectToServer() throws FTPConnectionClosedException, Exception {
         if (!ftpClient.isConnected()) {
@@ -244,7 +236,7 @@ public class FtpOperation {
     }
  
     /**
-           * Create FTP folder directory
+     * Create FTP folder directory
      *
      * @param pathName
      * @return
@@ -262,7 +254,7 @@ public class FtpOperation {
     }
  
     /**
-           * Dotted
+     * Dotted
      *
      * @param fileName
      * @return
@@ -273,7 +265,7 @@ public class FtpOperation {
     }
  
     /**
-           * Without dots
+     * Without dots
      *
      * @param fileName
      * @return
@@ -284,7 +276,7 @@ public class FtpOperation {
     }
  
     /**
-           * Function: Get the file directory according to the current time
+     * Function: Get the file directory according to the current time
      *
      * @return String
      */
@@ -296,8 +288,6 @@ public class FtpOperation {
         int currentYear = cal.get(Calendar.YEAR);
         int currentMouth = cal.get(Calendar.MONTH) + 1;
         int currentDay = cal.get(Calendar.DAY_OF_MONTH);
-        //int currentHour = cal.get(Calendar.HOUR_OF_DAY);
-        //return currentYear+FtpOperation.DIRSPLIT+currentMouth+FtpOperation.DIRSPLIT+currentDay+FtpOperation.DIRSPLIT+currentHour;
         return currentYear + FtpOperation.DIRSPLIT + currentMouth + FtpOperation.DIRSPLIT + currentDay;
     }
  
