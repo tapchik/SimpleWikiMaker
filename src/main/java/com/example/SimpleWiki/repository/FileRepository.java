@@ -129,14 +129,17 @@ public class FileRepository {
                 this.AddFile(fileMd);
             }
         }
-        String siteName = GetSiteName(settings);
-        String navigationTags = GetFilesNavigation(siteName, GetFileProperties());
         for (FileObject htmlFile: this.GetAllFiles())
         {
             if (htmlFile.GetType().equals("file"))
             {
                 htmlFile.SetText(htmlFile.MdTextToHtml(GetFileProperties()));
-                htmlFile.AddNavigation(navigationTags);
+                if (settings != null)
+                {
+                    String siteName = GetSiteName(settings);
+                    String navigationTags = GetFilesNavigation(siteName, GetFileProperties());
+                    htmlFile.AddNavigation(navigationTags);
+                }
             }
         }
         this.currentFolderPath = this.folderPath;
