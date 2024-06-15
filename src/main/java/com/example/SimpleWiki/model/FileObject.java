@@ -1,5 +1,6 @@
 package com.example.SimpleWiki.model;
 
+import com.example.SimpleWiki.enums.FileType;
 import com.vladsch.flexmark.util.ast.Node;
 
 import java.util.Arrays;
@@ -33,8 +34,8 @@ public class FileObject {
         return path;
     }
 
-    public String GetType() {
-        return type;
+    public FileType GetType() {
+        return FileType.Equivalent(this.type);
     }
 
     public HashMap<String,String> GetProperties() {
@@ -95,7 +96,7 @@ public class FileObject {
     }
 
     public String ExtractFrontmatter() {
-        // coppies out frontmatter from this.text
+        // copies out frontmatter from this.text
         String regex = "-{3}\n(.+?\n)+-{3}\n";
         Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
         Matcher matcher = pattern.matcher(this.text);
@@ -114,9 +115,9 @@ public class FileObject {
     }
 
     public void SetExtractedProperties(String frontmatter) {
-        // atempts to extract properties from this.text
+        // attempts to extract properties from this.text
         HashMap<String, String> properties = new HashMap<>();
-        // pealing away three dashes in the begining and end
+        // pealing away three dashes in the beginning and end
         if (frontmatter.startsWith("---"))
             frontmatter = frontmatter.substring(3);
         if (frontmatter.endsWith("---"))
@@ -132,7 +133,7 @@ public class FileObject {
             String value = prop.split(": ")[1];
             properties.put(key, value);
             count++;
-            // logging found properies, good for testing
+            // logging found properties, good for testing
             String log = String.format("File %s has property, %s: %s", this.name, key, value);
             System.out.println(log);
         }

@@ -10,6 +10,8 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 import java.util.List;
+
+import com.example.SimpleWiki.enums.FileType;
 import com.split.ftp.FtpOperation;
 
 import org.springframework.stereotype.Controller;
@@ -102,7 +104,7 @@ public class HomeController {
     public String ConvertMdFilesToHtml(Model model) 
     {
         htmlRepository = new FileRepository();
-        htmlRepository.SetHtmlRepositoryByMd(mdRepository, settingsRepository.GetFileByType("settings"));
+        htmlRepository.SetHtmlRepositoryByMd(mdRepository, settingsRepository.GetFileByType(FileType.SETTINGS));
         model.addAttribute("showHtmlBackButton", true);
         model.addAttribute("currentHtmlFiles", htmlRepository.GetCurrentFiles());
         return "fragments/listOfHtmlFiles";
@@ -163,7 +165,7 @@ public class HomeController {
         String restOfTheUrl = new AntPathMatcher().extractPathWithinPattern(request.getAttribute(HandlerMapping.BEST_MATCHING_PATTERN_ATTRIBUTE).toString(),request.getRequestURI());
         FileObject htmlFile = htmlRepository.GetFileByPath("/" + restOfTheUrl + ".html");
         String title = "Error";
-        String stylesFile = (settingsRepository.GetFileByType("theme") == null ? "" : settingsRepository.GetFileByType("theme").GetText());
+        String stylesFile = (settingsRepository.GetFileByType(FileType.THEME) == null ? "" : settingsRepository.GetFileByType(FileType.THEME).GetText());
         String tags = "<p>File doesnt exist</p>";
         if (htmlFile != null)
         {
@@ -172,7 +174,7 @@ public class HomeController {
         }
         else if (restOfTheUrl.equals("Welcome"))
         {
-            htmlFile = htmlRepository.GetFileByType("file");
+            htmlFile = htmlRepository.GetFileByType(FileType.FILE);
             title = htmlFile.GetName();
             tags = htmlFile.GetText();
         }
@@ -186,14 +188,14 @@ public class HomeController {
     @ResponseBody
     public String uploadToFtp(@RequestParam(name="login") String login, @RequestParam(name="password") String password, 
     @RequestParam(name="ip") String ip, @RequestParam(name="port") String port, @RequestParam(name="folder") String folder) {
-        String stylesFile = (settingsRepository.GetFileByType("theme") == null ? "" : settingsRepository.GetFileByType("theme").GetText());
-        String addStyles = (settingsRepository.GetFileByType("addTheme") == null ? "" : settingsRepository.GetFileByType("addTheme").GetText());
+        String stylesFile = (settingsRepository.GetFileByType(FileType.THEME) == null ? "" : settingsRepository.GetFileByType(FileType.THEME).GetText());
+        String addStyles = (settingsRepository.GetFileByType(FileType.ADD_THEME) == null ? "" : settingsRepository.GetFileByType(FileType.ADD_THEME).GetText());
         try 
         {
             FtpOperation ftpOperation = new FtpOperation(login, password, ip, Integer.parseInt(port), "/" + folder);
             for (FileObject file: htmlRepository.GetAllFiles())
             {
-                if (file.GetType().equals("dir")) 
+                if (file.GetType() == FileType.DIR)
                 {
                     ftpOperation.createDirectory(file.GetPath());
                 }
@@ -202,7 +204,7 @@ public class HomeController {
             {
                 for (FileObject file: htmlRepository.GetAllFiles())
                 {
-                    if (file.GetType().equals("file"))
+                    if (file.GetType() == FileType.FILE)
                     {
                         Path tempFile = Files.createTempFile(null, null);
                         List<String> content = Arrays.asList(file.GetFullHtml(stylesFile, addStyles));

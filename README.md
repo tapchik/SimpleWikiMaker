@@ -4,7 +4,7 @@
 0. Prerequisites:
     - Have Java 17 or later installed
     - Have Maven 3.5+ installed
-1.  Naviatte to the project folder: 
+1. Navigate to the project folder: 
     - On Windows: `cd ..\SimpleWikiMaker`
     - On Linux: `cd SimpleWikiMaker`
 2. Run the project: 
